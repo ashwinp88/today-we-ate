@@ -1,0 +1,28 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+tacos_home:
+  user: alice
+  name: Veggie Tacos
+  source: home
+  rating: 5
+  ate_on: 2025-12-31
+  retry_in_days: 7
+  notes: Tuesday taco night
+
+ramen_takeout:
+  user: alice
+  name: Ramen Bowl
+  source: takeout
+  rating: 4
+  ate_on: 2025-12-30
+  retry_in_days: 14
+  notes: Extra spicy
+
+pizza_restaurant:
+  user: bob
+  name: Brick Oven Pizza
+  source: restaurant
+  rating: 5
+  ate_on: 2025-12-29
+  retry_in_days: 21
+  notes: Date night

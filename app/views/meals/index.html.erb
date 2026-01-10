@@ -1,0 +1,40 @@
+<section class="panel">
+  <div class="panel-header">
+    <div>
+      <h1>Your meal history</h1>
+      <p class="muted">A quick look at everything you've logged recently.</p>
+    </div>
+    <%= link_to "Log a meal", new_meal_path, class: "btn" %>
+  </div>
+
+  <% if @meals.any? %>
+    <div class="table-wrapper">
+      <table>
+        <thead>
+          <tr>
+            <th>Date</th>
+            <th>Meal</th>
+            <th>Source</th>
+            <th>Rating</th>
+            <th>Try again in</th>
+            <th>Notes</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% @meals.each do |meal| %>
+            <tr>
+              <td><%= meal.ate_on.to_fs(:long) %></td>
+              <td><%= meal.name %></td>
+              <td><%= meal.source.titleize %></td>
+              <td><%= meal.rating %> / 5</td>
+              <td><%= meal.retry_in_days.present? ? pluralize(meal.retry_in_days, "day") : "--" %></td>
+              <td><%= meal.notes.presence || "--" %></td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+    </div>
+  <% else %>
+    <p>You haven't logged anything yet. <%= link_to "Start with your latest meal", new_meal_path %>.</p>
+  <% end %>
+</section>
