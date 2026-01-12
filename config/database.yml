@@ -40,3 +40,7 @@ production:
     <<: *default
     url: <%= production_cable_url %>
     migrations_paths: db/cable_migrate
+
+assets_precompile:
+  <<: *default
+  url: <%= asset_precompile_dummy_url %>

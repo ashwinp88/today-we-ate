@@ -12,7 +12,7 @@ services:
       RAILS_ENV: production
       RAILS_LOG_TO_STDOUT: "1"
       RAILS_SERVE_STATIC_FILES: "1"
-      DATABASE_URL: ${DATABASE_URL:-postgresql://postgres:postgres@db:5432/today_we_ate_production}
+      DATABASE_URL: ${DATABASE_URL:-postgresql://${POSTGRES_USER:-postgres}:${POSTGRES_PASSWORD:-postgres}@db:5432/${POSTGRES_DB:-today_we_ate_production}}
       WEB_CONCURRENCY: ${WEB_CONCURRENCY:-2}
     ports:
       - "${WEB_PORT:-3000}:80"
@@ -30,12 +30,15 @@ services:
       POSTGRES_DB: ${POSTGRES_DB:-today_we_ate_production}
       POSTGRES_USER: ${POSTGRES_USER:-postgres}
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-postgres}
+      POSTGRES_INITDB_ARGS: ${POSTGRES_INITDB_ARGS:-"--encoding=UTF8 --lc-collate=en_US.UTF-8 --lc-ctype=en_US.UTF-8"}
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-postgres} -d ${POSTGRES_DB:-today_we_ate_production}"]
       interval: 10s
       timeout: 5s
       retries: 6
     restart: unless-stopped
+    ports:
+      - "${POSTGRES_PORT:-55432}:5432"
     volumes:
       - postgres_data:/var/lib/postgresql/data
 
