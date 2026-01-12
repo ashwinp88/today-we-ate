@@ -1,35 +1,35 @@
-<%= form_with(model: meal, class: "stack gap-sm") do |form| %>
-  <div class="field-group">
-    <%= form.label :name, "What did you eat?" %>
-    <%= form.text_field :name, required: true, placeholder: "Veggie tacos, sushi night..." %>
+<%= form_with(model: meal, class: "space-y-4") do |form| %>
+  <div>
+    <%= form.label :name, "What did you eat?", class: "text-sm font-semibold text-slate-600" %>
+    <%= form.text_field :name, required: true, placeholder: "Veggie tacos, sushi night...", class: "mt-1 w-full rounded-2xl border border-slate-200 px-3 py-2 text-slate-900 shadow-sm focus:border-indigo-500 focus:ring-indigo-500" %>
   </div>
 
-  <div class="field-row">
-    <div class="field-group">
-      <%= form.label :source, "Where was it from?" %>
-      <%= form.select :source, Meal.sources.keys.map { |k| [k.titleize, k] }, {}, required: true %>
+  <div class="grid gap-4 md:grid-cols-2">
+    <div>
+      <%= form.label :source, "Where was it from?", class: "text-sm font-semibold text-slate-600" %>
+      <%= form.select :source, Meal.sources.keys.map { |k| [k.titleize, k] }, {}, required: true, class: "mt-1 w-full rounded-2xl border border-slate-200 px-3 py-2 text-slate-900 shadow-sm focus:border-indigo-500 focus:ring-indigo-500" %>
     </div>
-    <div class="field-group">
-      <%= form.label :rating, "Rating" %>
-      <%= form.select :rating, (1..5).map { |score| ["#{score} / 5", score] }, {}, required: true %>
-    </div>
-  </div>
-
-  <div class="field-row">
-    <div class="field-group">
-      <%= form.label :ate_on, "Date" %>
-      <%= form.date_field :ate_on, required: true %>
-    </div>
-    <div class="field-group">
-      <%= form.label :retry_in_days, "Try again in (days)" %>
-      <%= form.number_field :retry_in_days, min: 0, placeholder: "14" %>
+    <div>
+      <%= form.label :rating, "Rating", class: "text-sm font-semibold text-slate-600" %>
+      <%= form.select :rating, (1..5).map { |score| ["#{score} / 5", score] }, {}, required: true, class: "mt-1 w-full rounded-2xl border border-slate-200 px-3 py-2 text-slate-900 shadow-sm focus:border-indigo-500 focus:ring-indigo-500" %>
     </div>
   </div>
 
-  <div class="field-group">
-    <%= form.label :notes, "Notes" %>
-    <%= form.text_area :notes, rows: 3, placeholder: "New spice blend, extra crispy?" %>
+  <div class="grid gap-4 md:grid-cols-2">
+    <div>
+      <%= form.label :ate_on, "Date", class: "text-sm font-semibold text-slate-600" %>
+      <%= form.date_field :ate_on, required: true, class: "mt-1 w-full rounded-2xl border border-slate-200 px-3 py-2 text-slate-900 shadow-sm focus:border-indigo-500 focus:ring-indigo-500" %>
+    </div>
+    <div>
+      <%= form.label :retry_in_days, "Try again in (days)", class: "text-sm font-semibold text-slate-600" %>
+      <%= form.number_field :retry_in_days, min: 0, placeholder: "14", class: "mt-1 w-full rounded-2xl border border-slate-200 px-3 py-2 text-slate-900 shadow-sm focus:border-indigo-500 focus:ring-indigo-500" %>
+    </div>
   </div>
 
-  <%= form.submit (meal.persisted? ? "Update meal" : "Save meal"), class: "btn primary" %>
+  <div>
+    <%= form.label :notes, "Notes", class: "text-sm font-semibold text-slate-600" %>
+    <%= form.text_area :notes, rows: 3, placeholder: "New spice blend, extra crispy?", class: "mt-1 w-full rounded-2xl border border-slate-200 px-3 py-2 text-slate-900 shadow-sm focus:border-indigo-500 focus:ring-indigo-500" %>
+  </div>
+
+  <%= form.submit (meal.persisted? ? "Update meal" : "Save meal"), class: "w-full rounded-2xl bg-indigo-600 px-4 py-3 text-base font-semibold text-white shadow-lg hover:bg-indigo-500" %>
 <% end %>

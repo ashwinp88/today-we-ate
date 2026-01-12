@@ -1,40 +1,40 @@
-<section class="panel">
-  <div class="panel-header">
+<section class="rounded-3xl border border-white/50 bg-white/90 p-6 shadow-xl backdrop-blur">
+  <div class="mb-6 flex flex-wrap items-center justify-between gap-3">
     <div>
-      <h1>Your meal history</h1>
-      <p class="muted">A quick look at everything you've logged recently.</p>
+      <h1 class="text-2xl font-semibold text-slate-900">Your meal history</h1>
+      <p class="text-sm text-slate-500">A quick look at everything you've logged recently.</p>
     </div>
-    <%= link_to "Log a meal", new_meal_path, class: "btn" %>
+    <%= link_to "Log a meal", new_meal_path, class: "rounded-full bg-indigo-600 px-4 py-2 text-sm font-semibold text-white shadow hover:bg-indigo-500" %>
   </div>
 
   <% if @meals.any? %>
-    <div class="table-wrapper">
-      <table>
-        <thead>
+    <div class="overflow-x-auto rounded-2xl border border-slate-100">
+      <table class="min-w-full divide-y divide-slate-100 text-sm">
+        <thead class="bg-slate-50 text-left text-xs font-semibold uppercase tracking-wider text-slate-500">
           <tr>
-            <th>Date</th>
-            <th>Meal</th>
-            <th>Source</th>
-            <th>Rating</th>
-            <th>Try again in</th>
-            <th>Notes</th>
+            <th class="px-4 py-3">Date</th>
+            <th class="px-4 py-3">Meal</th>
+            <th class="px-4 py-3">Source</th>
+            <th class="px-4 py-3">Rating</th>
+            <th class="px-4 py-3">Try again in</th>
+            <th class="px-4 py-3">Notes</th>
           </tr>
         </thead>
-        <tbody>
+        <tbody class="divide-y divide-slate-100 bg-white/60 text-slate-700">
           <% @meals.each do |meal| %>
             <tr>
-              <td><%= meal.ate_on.to_fs(:long) %></td>
-              <td><%= meal.name %></td>
-              <td><%= meal.source.titleize %></td>
-              <td><%= meal.rating %> / 5</td>
-              <td><%= meal.retry_in_days.present? ? pluralize(meal.retry_in_days, "day") : "--" %></td>
-              <td><%= meal.notes.presence || "--" %></td>
+              <td class="px-4 py-3"><%= meal.ate_on.to_fs(:long) %></td>
+              <td class="px-4 py-3 font-semibold text-slate-900"><%= meal.name %></td>
+              <td class="px-4 py-3"><%= meal.source.titleize %></td>
+              <td class="px-4 py-3"><%= meal.rating %> / 5</td>
+              <td class="px-4 py-3"><%= meal.retry_in_days.present? ? pluralize(meal.retry_in_days, "day") : "--" %></td>
+              <td class="px-4 py-3"><%= meal.notes.presence || "--" %></td>
             </tr>
           <% end %>
         </tbody>
       </table>
     </div>
   <% else %>
-    <p>You haven't logged anything yet. <%= link_to "Start with your latest meal", new_meal_path %>.</p>
+    <p class="text-sm text-slate-500">You haven't logged anything yet. <%= link_to "Start with your latest meal", new_meal_path, class: "text-indigo-600" %>.</p>
   <% end %>
 </section>

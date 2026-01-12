@@ -1,41 +1,42 @@
-# SQLite. Versions 3.8.0 and up are supported.
-#   gem install sqlite3
-#
-#   Ensure the SQLite 3 gem is defined in your Gemfile
-#   gem "sqlite3"
-#
+# PostgreSQL configuration for Today We Ate
+# Development and test use local databases by default but can be overridden
+# with DEV_DATABASE_URL / TEST_DATABASE_URL. Production expects DATABASE_URL
+# (and optional *_DATABASE_URL overrides for cache/queue/cable roles).
+<%
+  production_primary_url = ENV["DATABASE_URL"] || (!Rails.env.production? && "postgresql://localhost/today_we_ate_production") || raise("DATABASE_URL must be set in production")
+  production_cache_url = ENV["CACHE_DATABASE_URL"] || production_primary_url
+  production_queue_url = ENV["QUEUE_DATABASE_URL"] || production_primary_url
+  production_cable_url = ENV["CABLE_DATABASE_URL"] || production_primary_url
+%>
+
 default: &default
-  adapter: sqlite3
-  max_connections: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
-  timeout: 5000
+  adapter: postgresql
+  encoding: unicode
+  pool: <%= ENV.fetch("RAILS_MAX_THREADS", 5) %>
+  variables:
+    statement_timeout: 5000
 
 development:
   <<: *default
-  database: storage/development.sqlite3
+  url: <%= ENV.fetch("DEV_DATABASE_URL", "postgresql://localhost/today_we_ate_development") %>
 
-# Warning: The database defined as "test" will be erased and
-# re-generated from your development database when you run "rake".
-# Do not set this db to the same as development or production.
 test:
   <<: *default
-  database: storage/test.sqlite3
+  url: <%= ENV.fetch("TEST_DATABASE_URL", "postgresql://localhost/today_we_ate_test") %>
 
-
-# Store production database in the storage/ directory, which by default
-# is mounted as a persistent Docker volume in config/deploy.yml.
 production:
   primary:
     <<: *default
-    database: storage/production.sqlite3
+    url: <%= production_primary_url %>
   cache:
     <<: *default
-    database: storage/production_cache.sqlite3
+    url: <%= production_cache_url %>
     migrations_paths: db/cache_migrate
   queue:
     <<: *default
-    database: storage/production_queue.sqlite3
+    url: <%= production_queue_url %>
     migrations_paths: db/queue_migrate
   cable:
     <<: *default
-    database: storage/production_cable.sqlite3
+    url: <%= production_cable_url %>
     migrations_paths: db/cable_migrate

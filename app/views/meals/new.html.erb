@@ -1,5 +1,7 @@
-<section class="panel">
-  <h1>Log a meal</h1>
-  <p>Tell us what you had so we can keep your streak going.</p>
-  <%= render "form", meal: @meal %>
+<section class="rounded-3xl border border-white/50 bg-white/85 p-8 shadow-xl backdrop-blur">
+  <h1 class="text-2xl font-semibold text-slate-900">Log a meal</h1>
+  <p class="mt-2 text-slate-600">Tell us what you had so we can keep your streak going.</p>
+  <div class="mt-6">
+    <%= render "form", meal: @meal %>
+  </div>
 </section>

@@ -1,0 +1,58 @@
+name: Deploy
+
+on:
+  push:
+    branches: ["main"]
+  workflow_dispatch:
+
+concurrency:
+  group: deploy-main
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    name: Build & Deploy
+    runs-on:
+      - self-hosted
+      - linux
+      - home
+    env:
+      DOCKER_BUILDKIT: "1"
+      COMPOSE_PROJECT_NAME: today_we_ate
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Generate production env file
+        run: |
+          cat <<'ENVFILE' > .env.production
+          RAILS_MASTER_KEY=${{ secrets.RAILS_MASTER_KEY }}
+          DATABASE_URL=${{ secrets.PRODUCTION_DATABASE_URL || 'postgresql://postgres:postgres@db:5432/today_we_ate_production' }}
+          WEB_PORT=${{ vars.WEB_PORT || '3000' }}
+          WEB_CONCURRENCY=${{ vars.WEB_CONCURRENCY || '2' }}
+          POSTGRES_DB=${{ vars.POSTGRES_DB || 'today_we_ate_production' }}
+          POSTGRES_USER=${{ secrets.POSTGRES_USER || 'postgres' }}
+          POSTGRES_PASSWORD=${{ secrets.POSTGRES_PASSWORD || 'postgres' }}
+          ENVFILE
+          chmod 600 .env.production
+
+      - name: Build image
+        run: docker compose build --pull web
+
+      - name: Ensure database is running
+        run: docker compose up -d db
+
+      - name: Run migrations
+        run: docker compose run --rm web ./bin/rails db:migrate
+
+      - name: Deploy application
+        run: docker compose up -d --remove-orphans web
+
+      - name: Show services
+        run: docker compose ps
+
+      - name: Cleanup dangling artifacts
+        run: docker image prune -f
+        continue-on-error: true

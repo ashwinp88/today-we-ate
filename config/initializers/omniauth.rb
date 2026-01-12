@@ -1,3 +1,5 @@
+require "set"
+
 OmniAuth.config.allowed_request_methods = %i[get post]
 OmniAuth.config.logger = Rails.logger
 
@@ -22,6 +24,8 @@ provider_configs = [
   }
 ]
 
+Rails.application.config.x.oauth_providers = Set.new
+
 Rails.application.config.middleware.use OmniAuth::Builder do
   provider :developer unless Rails.env.production?
 
@@ -30,6 +34,7 @@ Rails.application.config.middleware.use OmniAuth::Builder do
     client_secret = cred_or_env(config[:secret_key], config[:env_secret])
     next if client_id.blank? || client_secret.blank?
 
+    Rails.application.config.x.oauth_providers << config[:name].to_sym
     provider config[:name], client_id, client_secret, **config[:options]
   end
 

@@ -1,15 +1,16 @@
-#!/usr/bin/env bash
-set -euo pipefail
+#!/usr/bin/env sh
 
-# Load environment variables from .env.local (or .env) if present.
-if [[ -f ".env.local" ]]; then
-  set -a
-  source ./.env.local
-  set +a
-elif [[ -f ".env" ]]; then
-  set -a
-  source ./.env
-  set +a
+if ! gem list foreman -i --silent; then
+  echo "Installing foreman..."
+  gem install foreman
 fi
 
-exec ./bin/rails server "$@"
+# Default to port 3000 if not specified
+export PORT="${PORT:-3000}"
+
+# Let the debug gem allow remote connections,
+# but avoid loading until `debugger` is called
+export RUBY_DEBUG_OPEN="true"
+export RUBY_DEBUG_LAZY="true"
+
+exec foreman start -f Procfile.dev "$@"
