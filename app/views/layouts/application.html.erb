@@ -17,12 +17,12 @@
     <link rel="icon" href="<%= asset_path('favicon-32.png') %>" sizes="32x32" type="image/png">
     <link rel="apple-touch-icon" href="<%= asset_path('favicon-180.png') %>" sizes="180x180">
 
-    <%# Includes all stylesheet files in app/assets/stylesheets %>
-    <%= stylesheet_link_tag :app, "data-turbo-track": "reload" %>
+    <%= stylesheet_link_tag "tailwind", "data-turbo-track": "reload" %>
+    <%= stylesheet_link_tag "application", "data-turbo-track": "reload" %>
     <%= javascript_importmap_tags %>
   </head>
 
-  <body>
+  <body class="min-h-screen bg-slate-50 text-slate-900">
     <% landing_page = controller_name == 'dashboard' && action_name == 'show' && !user_signed_in? %>
     <% if session_background_asset.present? && !landing_page %>
       <!-- selected background: <%= session_background_asset %> -->
@@ -42,20 +42,20 @@
     <% end %>
     <% show_header = user_signed_in? || !(controller_name == 'dashboard' && action_name == 'show') %>
     <% if show_header %>
-      <header class="site-header">
-        <nav class="site-header__nav">
+      <header class="sticky top-0 z-40 border-b border-slate-200 bg-white/80 backdrop-blur">
+        <div class="mx-auto flex max-w-6xl items-center justify-end gap-4 px-4 py-3 text-sm font-medium text-slate-600">
           <% if user_signed_in? %>
-            <%= link_to "Dashboard", root_path %>
-            <%= link_to "Meals", meals_path %>
-            <%= link_to "Sign out", sign_out_path, data: { turbo_method: :delete } %>
+            <%= link_to "Dashboard", root_path, class: "hover:text-slate-900" %>
+            <%= link_to "Meals", meals_path, class: "hover:text-slate-900" %>
+            <%= link_to "Sign out", sign_out_path, data: { turbo_method: :delete }, class: "text-red-600 hover:text-red-700" %>
           <% else %>
-            <%= link_to "Sign in", login_path %>
+            <%= link_to "Sign in", login_path, class: "rounded-full border border-slate-300 px-4 py-1 text-slate-700 hover:bg-slate-100" %>
           <% end %>
-        </nav>
+        </div>
       </header>
     <% end %>
 
-    <main class="page">
+    <main class="<%= landing_page ? "" : "mx-auto max-w-6xl px-4 py-10" %>">
       <%= yield %>
     </main>
   </body>
