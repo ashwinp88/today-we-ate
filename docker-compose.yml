@@ -6,7 +6,7 @@ services:
       context: .
       dockerfile: Dockerfile
       args:
-        BUILD_DATABASE_URL: ${BUILD_DATABASE_URL:-postgresql://${POSTGRES_USER:-postgres}:${POSTGRES_PASSWORD:-postgres}@db:5432/${POSTGRES_DB:-today_we_ate_production}}
+        BUILD_DATABASE_URL: ${BUILD_DATABASE_URL}
     image: today-we-ate:latest
     env_file:
       - .env.production
@@ -14,7 +14,7 @@ services:
       RAILS_ENV: production
       RAILS_LOG_TO_STDOUT: "1"
       RAILS_SERVE_STATIC_FILES: "1"
-      DATABASE_URL: ${DATABASE_URL:-postgresql://${POSTGRES_USER:-postgres}:${POSTGRES_PASSWORD:-postgres}@db:5432/${POSTGRES_DB:-today_we_ate_production}}
+      DATABASE_URL: ${DATABASE_URL}
       WEB_CONCURRENCY: ${WEB_CONCURRENCY:-2}
     ports:
       - "${WEB_PORT:-3000}:80"
@@ -29,10 +29,10 @@ services:
   db:
     image: postgres:16
     environment:
-      POSTGRES_DB: ${POSTGRES_DB:-today_we_ate_production}
-      POSTGRES_USER: ${POSTGRES_USER:-postgres}
-      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-postgres}
-      POSTGRES_INITDB_ARGS: ${POSTGRES_INITDB_ARGS:-"--encoding=UTF8 --lc-collate=en_US.UTF-8 --lc-ctype=en_US.UTF-8"}
+      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_INITDB_ARGS: ${POSTGRES_INITDB_ARGS}
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-postgres} -d ${POSTGRES_DB:-today_we_ate_production}"]
       interval: 10s
@@ -42,9 +42,8 @@ services:
     ports:
       - "${POSTGRES_PORT:-55432}:5432"
     volumes:
-      - postgres_data:/var/lib/postgresql/data
+      - ${POSTGRES_DATA_PATH}:/var/lib/postgresql/data
 
 volumes:
-  postgres_data:
   storage:
   log:

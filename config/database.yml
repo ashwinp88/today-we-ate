@@ -3,7 +3,7 @@
 # with DEV_DATABASE_URL / TEST_DATABASE_URL. Production expects DATABASE_URL
 # (and optional *_DATABASE_URL overrides for cache/queue/cable roles).
 <%
-  production_primary_url = ENV["DATABASE_URL"] || ENV["BUILD_DATABASE_URL"] || (!Rails.env.production? && "postgresql://localhost/today_we_ate_production") || raise("DATABASE_URL must be set in production")
+  production_primary_url = ENV["DATABASE_URL"] || ENV["BUILD_DATABASE_URL"] || raise("DATABASE_URL must be set in production and BUILD_DATABASE_URL during builds")
   production_cache_url = ENV["CACHE_DATABASE_URL"] || production_primary_url
   production_queue_url = ENV["QUEUE_DATABASE_URL"] || production_primary_url
   production_cable_url = ENV["CABLE_DATABASE_URL"] || production_primary_url

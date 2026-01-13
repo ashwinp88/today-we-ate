@@ -20,8 +20,21 @@ jobs:
     env:
       DOCKER_BUILDKIT: "1"
       COMPOSE_PROJECT_NAME: today_we_ate
-      DEPLOY_DATABASE_URL: ${{ (secrets.PRODUCTION_DATABASE_URL != '' && !contains(secrets.PRODUCTION_DATABASE_URL, '%s')) && secrets.PRODUCTION_DATABASE_URL || format('postgresql://{0}:{1}@db:5432/{2}', secrets.POSTGRES_USER || vars.POSTGRES_USER || 'postgres', secrets.POSTGRES_PASSWORD || vars.POSTGRES_PASSWORD || 'postgres', secrets.POSTGRES_DB || vars.POSTGRES_DB || 'today_we_ate_production') }}
+      POSTGRES_USER: ${{ secrets.POSTGRES_USER || vars.POSTGRES_USER }}
+      POSTGRES_PASSWORD: ${{ secrets.POSTGRES_PASSWORD || vars.POSTGRES_PASSWORD }}
+      POSTGRES_DB: ${{ secrets.POSTGRES_DB || vars.POSTGRES_DB }}
+      POSTGRES_DATA_PATH: ${{ secrets.POSTGRES_DATA_PATH || vars.POSTGRES_DATA_PATH }}
+      POSTGRES_INITDB_ARGS: ${{ secrets.POSTGRES_INITDB_ARGS || vars.POSTGRES_INITDB_ARGS }}
+      DEPLOY_DATABASE_URL: ${{ format('postgresql://{0}:{1}@db:5432/{2}', secrets.POSTGRES_USER || vars.POSTGRES_USER, secrets.POSTGRES_PASSWORD || vars.POSTGRES_PASSWORD, secrets.POSTGRES_DB || vars.POSTGRES_DB) }}
     steps:
+      - name: Verify required configuration
+        run: |
+          : "${POSTGRES_USER:?POSTGRES_USER is required}"
+          : "${POSTGRES_PASSWORD:?POSTGRES_PASSWORD is required}"
+          : "${POSTGRES_DB:?POSTGRES_DB is required}"
+          : "${POSTGRES_DATA_PATH:?POSTGRES_DATA_PATH is required}"
+          : "${POSTGRES_INITDB_ARGS:?POSTGRES_INITDB_ARGS is required}"
+          : "${DEPLOY_DATABASE_URL:?DEPLOY_DATABASE_URL is required}"
       - name: Checkout
         uses: actions/checkout@v4
         with:
@@ -31,9 +44,11 @@ jobs:
         run: |
           cat <<'ENVFILE' > .env.production
           RAILS_MASTER_KEY=${{ secrets.RAILS_MASTER_KEY }}
-          POSTGRES_USER=${{ secrets.POSTGRES_USER || 'postgres' }}
-          POSTGRES_PASSWORD=${{ secrets.POSTGRES_PASSWORD || 'postgres' }}
-          POSTGRES_DB=${{ secrets.POSTGRES_DB || vars.POSTGRES_DB || 'today_we_ate_production' }}
+          POSTGRES_USER=${{ env.POSTGRES_USER }}
+          POSTGRES_PASSWORD=${{ env.POSTGRES_PASSWORD }}
+          POSTGRES_DB=${{ env.POSTGRES_DB }}
+          POSTGRES_DATA_PATH=${{ env.POSTGRES_DATA_PATH }}
+          POSTGRES_INITDB_ARGS=${{ env.POSTGRES_INITDB_ARGS }}
           WEB_PORT=${{ vars.WEB_PORT || '3000' }}
           WEB_CONCURRENCY=${{ vars.WEB_CONCURRENCY || '2' }}
           DATABASE_URL=${{ env.DEPLOY_DATABASE_URL }}
