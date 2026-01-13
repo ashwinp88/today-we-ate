@@ -16,10 +16,42 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v5
 
-      - name: Set up Ruby
-        uses: ruby/setup-ruby@v1
+      - name: Configure rbenv
+        run: |
+          echo "RBENV_ROOT=$HOME/.rbenv" >> "$GITHUB_ENV"
+          echo "$HOME/.rbenv/bin" >> "$GITHUB_PATH"
+          echo "$HOME/.rbenv/shims" >> "$GITHUB_PATH"
+          export RBENV_ROOT="$HOME/.rbenv"
+          export PATH="$HOME/.rbenv/bin:$HOME/.rbenv/shims:$PATH"
+          rbenv global 4.0.0
+          rbenv rehash
+          ruby -v
+
+      - name: Cache bundle
+        uses: actions/cache@v4
         with:
-          bundler-cache: true
+          path: vendor/bundle
+          key: bundle-${{ runner.os }}-${{ hashFiles('**/Gemfile.lock') }}
+          restore-keys: |
+            bundle-${{ runner.os }}-
+
+      - name: Install gems
+        run: |
+          bundle config set path vendor/bundle
+          bundle install --jobs 4 --retry 3
+
+      - name: Cache bundle
+        uses: actions/cache@v4
+        with:
+          path: vendor/bundle
+          key: bundle-${{ runner.os }}-${{ hashFiles('**/Gemfile.lock') }}
+          restore-keys: |
+            bundle-${{ runner.os }}-
+
+      - name: Install gems
+        run: |
+          bundle config set path vendor/bundle
+          bundle install --jobs 4 --retry 3
 
       - name: Scan for common Rails security vulnerabilities using static analysis
         run: bin/brakeman --no-pager
@@ -37,10 +69,42 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v5
 
-      - name: Set up Ruby
-        uses: ruby/setup-ruby@v1
+      - name: Configure rbenv
+        run: |
+          echo "RBENV_ROOT=$HOME/.rbenv" >> "$GITHUB_ENV"
+          echo "$HOME/.rbenv/bin" >> "$GITHUB_PATH"
+          echo "$HOME/.rbenv/shims" >> "$GITHUB_PATH"
+          export RBENV_ROOT="$HOME/.rbenv"
+          export PATH="$HOME/.rbenv/bin:$HOME/.rbenv/shims:$PATH"
+          rbenv global 4.0.0
+          rbenv rehash
+          ruby -v
+
+      - name: Cache bundle
+        uses: actions/cache@v4
         with:
-          bundler-cache: true
+          path: vendor/bundle
+          key: bundle-${{ runner.os }}-${{ hashFiles('**/Gemfile.lock') }}
+          restore-keys: |
+            bundle-${{ runner.os }}-
+
+      - name: Install gems
+        run: |
+          bundle config set path vendor/bundle
+          bundle install --jobs 4 --retry 3
+
+      - name: Cache bundle
+        uses: actions/cache@v4
+        with:
+          path: vendor/bundle
+          key: bundle-${{ runner.os }}-${{ hashFiles('**/Gemfile.lock') }}
+          restore-keys: |
+            bundle-${{ runner.os }}-
+
+      - name: Install gems
+        run: |
+          bundle config set path vendor/bundle
+          bundle install --jobs 4 --retry 3
 
       - name: Scan for security vulnerabilities in JavaScript dependencies
         run: bin/importmap audit
@@ -56,10 +120,42 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v5
 
-      - name: Set up Ruby
-        uses: ruby/setup-ruby@v1
+      - name: Configure rbenv
+        run: |
+          echo "RBENV_ROOT=$HOME/.rbenv" >> "$GITHUB_ENV"
+          echo "$HOME/.rbenv/bin" >> "$GITHUB_PATH"
+          echo "$HOME/.rbenv/shims" >> "$GITHUB_PATH"
+          export RBENV_ROOT="$HOME/.rbenv"
+          export PATH="$HOME/.rbenv/bin:$HOME/.rbenv/shims:$PATH"
+          rbenv global 4.0.0
+          rbenv rehash
+          ruby -v
+
+      - name: Cache bundle
+        uses: actions/cache@v4
         with:
-          bundler-cache: true
+          path: vendor/bundle
+          key: bundle-${{ runner.os }}-${{ hashFiles('**/Gemfile.lock') }}
+          restore-keys: |
+            bundle-${{ runner.os }}-
+
+      - name: Install gems
+        run: |
+          bundle config set path vendor/bundle
+          bundle install --jobs 4 --retry 3
+
+      - name: Cache bundle
+        uses: actions/cache@v4
+        with:
+          path: vendor/bundle
+          key: bundle-${{ runner.os }}-${{ hashFiles('**/Gemfile.lock') }}
+          restore-keys: |
+            bundle-${{ runner.os }}-
+
+      - name: Install gems
+        run: |
+          bundle config set path vendor/bundle
+          bundle install --jobs 4 --retry 3
 
       - name: Prepare RuboCop cache
         uses: actions/cache@v4
@@ -79,6 +175,22 @@ jobs:
       - self-hosted
       - linux
       - home
+    services:
+      postgres:
+        image: postgres:16
+        env:
+          POSTGRES_DB: today_we_ate_test
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+        ports:
+          - 65432:5432
+        options: >-
+          --health-cmd "pg_isready -U postgres -d today_we_ate_test"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 6
+    env:
+      TEST_DATABASE_URL: postgresql://postgres:postgres@localhost:65432/today_we_ate_test
 
     # services:
     #  redis:
@@ -90,10 +202,42 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v5
 
-      - name: Set up Ruby
-        uses: ruby/setup-ruby@v1
+      - name: Configure rbenv
+        run: |
+          echo "RBENV_ROOT=$HOME/.rbenv" >> "$GITHUB_ENV"
+          echo "$HOME/.rbenv/bin" >> "$GITHUB_PATH"
+          echo "$HOME/.rbenv/shims" >> "$GITHUB_PATH"
+          export RBENV_ROOT="$HOME/.rbenv"
+          export PATH="$HOME/.rbenv/bin:$HOME/.rbenv/shims:$PATH"
+          rbenv global 4.0.0
+          rbenv rehash
+          ruby -v
+
+      - name: Cache bundle
+        uses: actions/cache@v4
         with:
-          bundler-cache: true
+          path: vendor/bundle
+          key: bundle-${{ runner.os }}-${{ hashFiles('**/Gemfile.lock') }}
+          restore-keys: |
+            bundle-${{ runner.os }}-
+
+      - name: Install gems
+        run: |
+          bundle config set path vendor/bundle
+          bundle install --jobs 4 --retry 3
+
+      - name: Cache bundle
+        uses: actions/cache@v4
+        with:
+          path: vendor/bundle
+          key: bundle-${{ runner.os }}-${{ hashFiles('**/Gemfile.lock') }}
+          restore-keys: |
+            bundle-${{ runner.os }}-
+
+      - name: Install gems
+        run: |
+          bundle config set path vendor/bundle
+          bundle install --jobs 4 --retry 3
 
       - name: Run tests
         env:
@@ -107,6 +251,22 @@ jobs:
       - self-hosted
       - linux
       - home
+    services:
+      postgres:
+        image: postgres:16
+        env:
+          POSTGRES_DB: today_we_ate_system_test
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+        ports:
+          - 65433:5432
+        options: >-
+          --health-cmd "pg_isready -U postgres -d today_we_ate_system_test"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 6
+    env:
+      TEST_DATABASE_URL: postgresql://postgres:postgres@localhost:65433/today_we_ate_system_test
 
     # services:
     #  redis:
@@ -118,10 +278,42 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v5
 
-      - name: Set up Ruby
-        uses: ruby/setup-ruby@v1
+      - name: Configure rbenv
+        run: |
+          echo "RBENV_ROOT=$HOME/.rbenv" >> "$GITHUB_ENV"
+          echo "$HOME/.rbenv/bin" >> "$GITHUB_PATH"
+          echo "$HOME/.rbenv/shims" >> "$GITHUB_PATH"
+          export RBENV_ROOT="$HOME/.rbenv"
+          export PATH="$HOME/.rbenv/bin:$HOME/.rbenv/shims:$PATH"
+          rbenv global 4.0.0
+          rbenv rehash
+          ruby -v
+
+      - name: Cache bundle
+        uses: actions/cache@v4
         with:
-          bundler-cache: true
+          path: vendor/bundle
+          key: bundle-${{ runner.os }}-${{ hashFiles('**/Gemfile.lock') }}
+          restore-keys: |
+            bundle-${{ runner.os }}-
+
+      - name: Install gems
+        run: |
+          bundle config set path vendor/bundle
+          bundle install --jobs 4 --retry 3
+
+      - name: Cache bundle
+        uses: actions/cache@v4
+        with:
+          path: vendor/bundle
+          key: bundle-${{ runner.os }}-${{ hashFiles('**/Gemfile.lock') }}
+          restore-keys: |
+            bundle-${{ runner.os }}-
+
+      - name: Install gems
+        run: |
+          bundle config set path vendor/bundle
+          bundle install --jobs 4 --retry 3
 
       - name: Run System Tests
         env:

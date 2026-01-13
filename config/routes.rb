@@ -6,7 +6,9 @@ Rails.application.routes.draw do
   get "up" => "rails/health#show", as: :rails_health_check
 
   # Chrome devtools probes this well-known path; return 404 without raising errors.
-  get "/.well-known/appspecific/com.chrome.devtools.json", to: proc { [404, { "Content-Type" => "application/json" }, ['{"error":"not_found"}']] }
+  get "/.well-known/appspecific/com.chrome.devtools.json", to: proc {
+    [ 404, { "Content-Type" => "application/json" }, [ '{"error":"not_found"}' ] ]
+  }
 
   root "dashboard#show"
 

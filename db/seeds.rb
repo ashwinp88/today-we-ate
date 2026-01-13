@@ -8,7 +8,7 @@ if Rails.env.development?
     u.email = "demo@example.com"
   end
 
-  next_try = [7, 14, 30, nil]
+  next_try = [ 7, 14, 30, nil ]
   %w[Tacos Pizza Ramen Salad Curry Sandwich].each_with_index do |meal_name, index|
     user.meals.find_or_create_by!(name: meal_name, ate_on: (index + 1).days.ago.to_date) do |meal|
       meal.source = Meal.sources.keys.sample
