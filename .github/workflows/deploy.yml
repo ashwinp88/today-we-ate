@@ -27,6 +27,7 @@ jobs:
       POSTGRES_INITDB_ARGS: ${{ secrets.POSTGRES_INITDB_ARGS || vars.POSTGRES_INITDB_ARGS }}
       DATABASE_URL: ${{ format('postgresql://{0}:{1}@db:5432/{2}', secrets.POSTGRES_USER || vars.POSTGRES_USER, secrets.POSTGRES_PASSWORD || vars.POSTGRES_PASSWORD, secrets.POSTGRES_DB || vars.POSTGRES_DB) }}
       BUILD_DATABASE_URL: ${{ format('postgresql://{0}:{1}@db:5432/{2}', secrets.POSTGRES_USER || vars.POSTGRES_USER, secrets.POSTGRES_PASSWORD || vars.POSTGRES_PASSWORD, secrets.POSTGRES_DB || vars.POSTGRES_DB) }}
+      RAILS_MASTER_KEY: ${{ secrets.RAILS_MASTER_KEY || vars.RAILS_MASTER_KEY }}
     steps:
       - name: Verify required configuration
         run: |
@@ -37,6 +38,7 @@ jobs:
           : "${POSTGRES_INITDB_ARGS:?POSTGRES_INITDB_ARGS is required}"
           : "${DATABASE_URL:?DATABASE_URL is required}"
           : "${BUILD_DATABASE_URL:?BUILD_DATABASE_URL is required}"
+          : "${RAILS_MASTER_KEY:?RAILS_MASTER_KEY is required}"
       - name: Checkout
         uses: actions/checkout@v4
         with:
@@ -45,7 +47,7 @@ jobs:
       - name: Generate production env file
         run: |
           cat <<'ENVFILE' > .env.production
-          RAILS_MASTER_KEY=${{ secrets.RAILS_MASTER_KEY }}
+          RAILS_MASTER_KEY=${{ secrets.RAILS_MASTER_KEY || vars.RAILS_MASTER_KEY }}
           POSTGRES_USER=${{ env.POSTGRES_USER }}
           POSTGRES_PASSWORD=${{ env.POSTGRES_PASSWORD }}
           POSTGRES_DB=${{ env.POSTGRES_DB }}
