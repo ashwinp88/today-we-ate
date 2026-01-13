@@ -20,6 +20,7 @@ jobs:
     env:
       DOCKER_BUILDKIT: "1"
       COMPOSE_PROJECT_NAME: today_we_ate
+      DEPLOY_DATABASE_URL: ${{ (secrets.PRODUCTION_DATABASE_URL != '' && !contains(secrets.PRODUCTION_DATABASE_URL, '%s')) && secrets.PRODUCTION_DATABASE_URL || format('postgresql://%s:%s@db:5432/%s', secrets.POSTGRES_USER || vars.POSTGRES_USER || 'postgres', secrets.POSTGRES_PASSWORD || vars.POSTGRES_PASSWORD || 'postgres', secrets.POSTGRES_DB || vars.POSTGRES_DB || 'today_we_ate_production') }}
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -35,13 +36,13 @@ jobs:
           POSTGRES_DB=${{ secrets.POSTGRES_DB || vars.POSTGRES_DB || 'today_we_ate_production' }}
           WEB_PORT=${{ vars.WEB_PORT || '3000' }}
           WEB_CONCURRENCY=${{ vars.WEB_CONCURRENCY || '2' }}
-          DATABASE_URL=${{ secrets.PRODUCTION_DATABASE_URL || format('postgresql://%s:%s@db:5432/%s', secrets.POSTGRES_USER || 'postgres', secrets.POSTGRES_PASSWORD || 'postgres', secrets.POSTGRES_DB || vars.POSTGRES_DB || 'today_we_ate_production') }}
+          DATABASE_URL=${{ env.DEPLOY_DATABASE_URL }}
           ENVFILE
           chmod 600 .env.production
 
       - name: Build image
         env:
-          BUILD_DATABASE_URL: ${{ secrets.PRODUCTION_DATABASE_URL || format('postgresql://%s:%s@db:5432/%s', secrets.POSTGRES_USER || vars.POSTGRES_USER || 'postgres', secrets.POSTGRES_PASSWORD || vars.POSTGRES_PASSWORD || 'postgres', secrets.POSTGRES_DB || vars.POSTGRES_DB || 'today_we_ate_production') }}
+          BUILD_DATABASE_URL: ${{ env.DEPLOY_DATABASE_URL }}
         run: docker compose build --pull web
 
       - name: Ensure database is running
