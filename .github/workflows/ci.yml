@@ -21,6 +21,8 @@ jobs:
           echo "RBENV_ROOT=$HOME/.rbenv" >> "$GITHUB_ENV"
           echo "$HOME/.rbenv/bin" >> "$GITHUB_PATH"
           echo "$HOME/.rbenv/shims" >> "$GITHUB_PATH"
+          export RBENV_ROOT="$HOME/.rbenv"
+          export PATH="$HOME/.rbenv/bin:$HOME/.rbenv/shims:$PATH"
           rbenv global 4.0.0
           rbenv rehash
           ruby -v
@@ -46,6 +48,8 @@ jobs:
           echo "RBENV_ROOT=$HOME/.rbenv" >> "$GITHUB_ENV"
           echo "$HOME/.rbenv/bin" >> "$GITHUB_PATH"
           echo "$HOME/.rbenv/shims" >> "$GITHUB_PATH"
+          export RBENV_ROOT="$HOME/.rbenv"
+          export PATH="$HOME/.rbenv/bin:$HOME/.rbenv/shims:$PATH"
           rbenv global 4.0.0
           rbenv rehash
           ruby -v
@@ -69,6 +73,8 @@ jobs:
           echo "RBENV_ROOT=$HOME/.rbenv" >> "$GITHUB_ENV"
           echo "$HOME/.rbenv/bin" >> "$GITHUB_PATH"
           echo "$HOME/.rbenv/shims" >> "$GITHUB_PATH"
+          export RBENV_ROOT="$HOME/.rbenv"
+          export PATH="$HOME/.rbenv/bin:$HOME/.rbenv/shims:$PATH"
           rbenv global 4.0.0
           rbenv rehash
           ruby -v
@@ -107,6 +113,8 @@ jobs:
           echo "RBENV_ROOT=$HOME/.rbenv" >> "$GITHUB_ENV"
           echo "$HOME/.rbenv/bin" >> "$GITHUB_PATH"
           echo "$HOME/.rbenv/shims" >> "$GITHUB_PATH"
+          export RBENV_ROOT="$HOME/.rbenv"
+          export PATH="$HOME/.rbenv/bin:$HOME/.rbenv/shims:$PATH"
           rbenv global 4.0.0
           rbenv rehash
           ruby -v
@@ -139,6 +147,8 @@ jobs:
           echo "RBENV_ROOT=$HOME/.rbenv" >> "$GITHUB_ENV"
           echo "$HOME/.rbenv/bin" >> "$GITHUB_PATH"
           echo "$HOME/.rbenv/shims" >> "$GITHUB_PATH"
+          export RBENV_ROOT="$HOME/.rbenv"
+          export PATH="$HOME/.rbenv/bin:$HOME/.rbenv/shims:$PATH"
           rbenv global 4.0.0
           rbenv rehash
           ruby -v
