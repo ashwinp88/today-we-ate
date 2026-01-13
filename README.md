@@ -56,6 +56,7 @@ The repository includes a production-ready `docker-compose.yml` plus a GitHub Ac
    docker compose run --rm web ./bin/rails db:migrate
    docker compose up -d --remove-orphans web
    ```
+3. The `db` service is a dedicated Postgres 16 container with its own volume; it is exposed on `${POSTGRES_PORT:-55432}` so you can connect from your host using `psql -h localhost -p 55432 -U $POSTGRES_USER $POSTGRES_DB` for backups/maintenance. Adjust the port or point `DATABASE_URL` at an external Postgres instance if you prefer a fully managed database.
 
 ### Push-to-main automation
 
@@ -63,8 +64,7 @@ The repository includes a production-ready `docker-compose.yml` plus a GitHub Ac
 2. Ensure Docker + the Compose plugin are available to the runner user.
 3. Add the following repository **secrets** (Settings → Secrets and variables → Actions):
    - `RAILS_MASTER_KEY`
-   - `PRODUCTION_DATABASE_URL` (e.g., `postgresql://postgres:postgres@db:5432/today_we_ate_production` or point to an external database)
-   - Optional overrides: `POSTGRES_USER`, `POSTGRES_PASSWORD`
+   - `POSTGRES_USER`, `POSTGRES_PASSWORD`, and `POSTGRES_DB` (if you keep the compose Postgres). The workflow builds `DATABASE_URL` from these, so you don’t have to store the DSN separately unless you’re targeting an external DB—in that case set `PRODUCTION_DATABASE_URL` explicitly (e.g., `postgresql://user:pass@host:5432/db`).
 4. (Optional) Add repository **variables** for non-sensitive values such as `WEB_PORT`, `WEB_CONCURRENCY`, and `POSTGRES_DB`.
 
 On every push to `main` (or via the "Run workflow" button) the `deploy` workflow will:
