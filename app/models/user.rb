@@ -11,7 +11,7 @@ class User < ApplicationRecord
   def self.from_omniauth(auth_hash)
     find_or_initialize_by(provider: auth_hash.provider, uid: auth_hash.uid).tap do |user|
       info = auth_hash.info || {}
-      user.name = info.name.presence || [info.first_name, info.last_name].compact.join(" ").presence || user.name
+      user.name = info.name.presence || [ info.first_name, info.last_name ].compact.join(" ").presence || user.name
       user.email = info.email.presence || user.email
       user.image_url = info.image if info.image.present?
       user.save!

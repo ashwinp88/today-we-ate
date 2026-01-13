@@ -13,4 +13,3 @@ class PreauthsController < ApplicationController
     end
   end
 end
-

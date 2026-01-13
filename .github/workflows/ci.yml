@@ -175,6 +175,22 @@ jobs:
       - self-hosted
       - linux
       - home
+    services:
+      postgres:
+        image: postgres:16
+        env:
+          POSTGRES_DB: today_we_ate_test
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+        ports:
+          - 65432:5432
+        options: >-
+          --health-cmd "pg_isready -U postgres -d today_we_ate_test"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 6
+    env:
+      TEST_DATABASE_URL: postgresql://postgres:postgres@localhost:65432/today_we_ate_test
 
     # services:
     #  redis:
@@ -235,6 +251,22 @@ jobs:
       - self-hosted
       - linux
       - home
+    services:
+      postgres:
+        image: postgres:16
+        env:
+          POSTGRES_DB: today_we_ate_system_test
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+        ports:
+          - 65433:5432
+        options: >-
+          --health-cmd "pg_isready -U postgres -d today_we_ate_system_test"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 6
+    env:
+      TEST_DATABASE_URL: postgresql://postgres:postgres@localhost:65433/today_we_ate_system_test
 
     # services:
     #  redis:

@@ -12,8 +12,8 @@ end
 provider_configs = [
   {
     name: :google_oauth2,
-    id_key: [:oauth, :google, :client_id],
-    secret_key: [:oauth, :google, :client_secret],
+    id_key: [ :oauth, :google, :client_id ],
+    secret_key: [ :oauth, :google, :client_secret ],
     env_id: "GOOGLE_CLIENT_ID",
     env_secret: "GOOGLE_CLIENT_SECRET",
     options: {
