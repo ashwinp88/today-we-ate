@@ -20,7 +20,7 @@ jobs:
     env:
       DOCKER_BUILDKIT: "1"
       COMPOSE_PROJECT_NAME: today_we_ate
-      DEPLOY_DATABASE_URL: ${{ (secrets.PRODUCTION_DATABASE_URL != '' && !contains(secrets.PRODUCTION_DATABASE_URL, '%s')) && secrets.PRODUCTION_DATABASE_URL || format('postgresql://%s:%s@db:5432/%s', secrets.POSTGRES_USER || vars.POSTGRES_USER || 'postgres', secrets.POSTGRES_PASSWORD || vars.POSTGRES_PASSWORD || 'postgres', secrets.POSTGRES_DB || vars.POSTGRES_DB || 'today_we_ate_production') }}
+      DEPLOY_DATABASE_URL: ${{ (secrets.PRODUCTION_DATABASE_URL != '' && !contains(secrets.PRODUCTION_DATABASE_URL, '%s')) && secrets.PRODUCTION_DATABASE_URL || format('postgresql://{0}:{1}@db:5432/{2}', secrets.POSTGRES_USER || vars.POSTGRES_USER || 'postgres', secrets.POSTGRES_PASSWORD || vars.POSTGRES_PASSWORD || 'postgres', secrets.POSTGRES_DB || vars.POSTGRES_DB || 'today_we_ate_production') }}
     steps:
       - name: Checkout
         uses: actions/checkout@v4
