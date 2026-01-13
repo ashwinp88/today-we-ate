@@ -41,7 +41,7 @@ jobs:
 
       - name: Build image
         env:
-          DATABASE_URL: ${{ secrets.PRODUCTION_DATABASE_URL || format('postgresql://%s:%s@db:5432/%s', secrets.POSTGRES_USER || vars.POSTGRES_USER || 'postgres', secrets.POSTGRES_PASSWORD || vars.POSTGRES_PASSWORD || 'postgres', secrets.POSTGRES_DB || vars.POSTGRES_DB || 'today_we_ate_production') }}
+          BUILD_DATABASE_URL: ${{ secrets.PRODUCTION_DATABASE_URL || format('postgresql://%s:%s@db:5432/%s', secrets.POSTGRES_USER || vars.POSTGRES_USER || 'postgres', secrets.POSTGRES_PASSWORD || vars.POSTGRES_PASSWORD || 'postgres', secrets.POSTGRES_DB || vars.POSTGRES_DB || 'today_we_ate_production') }}
         run: docker compose build --pull web
 
       - name: Ensure database is running

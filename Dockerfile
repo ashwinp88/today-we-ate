@@ -30,8 +30,8 @@ ENV RAILS_ENV="production" \
 # Throw-away build stage to reduce size of final image
 FROM base AS build
 
-ARG DATABASE_URL=postgresql://postgres:postgres@db:5432/today_we_ate_production
-ENV DATABASE_URL=${DATABASE_URL}
+ARG BUILD_DATABASE_URL=postgresql://postgres:postgres@db:5432/today_we_ate_production
+ENV BUILD_DATABASE_URL=${BUILD_DATABASE_URL}
 
 # Install packages needed to build gems
 RUN apt-get update -qq && \
