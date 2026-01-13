@@ -16,10 +16,13 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v5
 
-      - name: Set up Ruby
-        uses: ruby/setup-ruby@v1
-        with:
-          bundler-cache: true
+      - name: Use rbenv Ruby
+        run: |
+          export RBENV_ROOT="$HOME/.rbenv"
+          export PATH="$RBENV_ROOT/bin:$RBENV_ROOT/shims:$PATH"
+          rbenv global 4.0.0
+          rbenv rehash
+          ruby -v
 
       - name: Scan for common Rails security vulnerabilities using static analysis
         run: bin/brakeman --no-pager
@@ -37,10 +40,13 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v5
 
-      - name: Set up Ruby
-        uses: ruby/setup-ruby@v1
-        with:
-          bundler-cache: true
+      - name: Use rbenv Ruby
+        run: |
+          export RBENV_ROOT="$HOME/.rbenv"
+          export PATH="$RBENV_ROOT/bin:$RBENV_ROOT/shims:$PATH"
+          rbenv global 4.0.0
+          rbenv rehash
+          ruby -v
 
       - name: Scan for security vulnerabilities in JavaScript dependencies
         run: bin/importmap audit
@@ -56,10 +62,13 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v5
 
-      - name: Set up Ruby
-        uses: ruby/setup-ruby@v1
-        with:
-          bundler-cache: true
+      - name: Use rbenv Ruby
+        run: |
+          export RBENV_ROOT="$HOME/.rbenv"
+          export PATH="$RBENV_ROOT/bin:$RBENV_ROOT/shims:$PATH"
+          rbenv global 4.0.0
+          rbenv rehash
+          ruby -v
 
       - name: Prepare RuboCop cache
         uses: actions/cache@v4
@@ -90,10 +99,13 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v5
 
-      - name: Set up Ruby
-        uses: ruby/setup-ruby@v1
-        with:
-          bundler-cache: true
+      - name: Use rbenv Ruby
+        run: |
+          export RBENV_ROOT="$HOME/.rbenv"
+          export PATH="$RBENV_ROOT/bin:$RBENV_ROOT/shims:$PATH"
+          rbenv global 4.0.0
+          rbenv rehash
+          ruby -v
 
       - name: Run tests
         env:
@@ -118,10 +130,13 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v5
 
-      - name: Set up Ruby
-        uses: ruby/setup-ruby@v1
-        with:
-          bundler-cache: true
+      - name: Use rbenv Ruby
+        run: |
+          export RBENV_ROOT="$HOME/.rbenv"
+          export PATH="$RBENV_ROOT/bin:$RBENV_ROOT/shims:$PATH"
+          rbenv global 4.0.0
+          rbenv rehash
+          ruby -v
 
       - name: Run System Tests
         env:
