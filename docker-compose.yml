@@ -17,7 +17,7 @@ services:
       DATABASE_URL: ${DATABASE_URL}
       WEB_CONCURRENCY: ${WEB_CONCURRENCY:-2}
     ports:
-      - "${WEB_PORT:-3000}:80"
+      - "${WEB_PORT:-3001}:80"
     depends_on:
       db:
         condition: service_healthy

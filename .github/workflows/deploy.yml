@@ -53,7 +53,7 @@ jobs:
           POSTGRES_DB=${{ env.POSTGRES_DB }}
           POSTGRES_DATA_PATH=${{ env.POSTGRES_DATA_PATH }}
           POSTGRES_INITDB_ARGS=${{ env.POSTGRES_INITDB_ARGS }}
-          WEB_PORT=${{ vars.WEB_PORT || '3000' }}
+          WEB_PORT=${{ vars.WEB_PORT || '3001' }}
           WEB_CONCURRENCY=${{ vars.WEB_CONCURRENCY || '2' }}
           DATABASE_URL=${{ env.DATABASE_URL }}
           ENVFILE
