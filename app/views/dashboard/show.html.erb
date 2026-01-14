@@ -55,10 +55,10 @@
 <% else %>
   <% background_asset = session_background_asset.presence || "banner-1600.jpg" %>
   <div class="flex w-full justify-center px-4">
-    <div class="w-full max-w-2xl space-y-8 rounded-[38px] border border-white/40 bg-white/35 p-10 shadow-[0_35px_90px_rgba(15,23,42,0.4)] backdrop-blur-2xl">
+    <div class="w-full max-w-2xl space-y-8 rounded-[38px] border border-white/40 bg-white/35 p-10 shadow-[0_35px_90px_rgba(15,23,42,0.4)] backdrop-blur-2xl" style="background-image: linear-gradient(to bottom, rgba(0,0,0,0.25), transparent);">
       <div class="space-y-2 text-center">
-        <p class="text-5xl font-semibold tracking-tight text-slate-900">Today We Ate</p>
-        <p class="text-base font-medium text-slate-600">Track your meals and discover favorites.</p>
+        <p class="text-6xl font-semibold tracking-tight text-white/95">Today We Ate</p>
+        <p class="text-base font-medium text-white/70">Track your meals and discover favorites.</p>
       </div>
 
       <% if oauth_provider_enabled?(:google_oauth2) %>
