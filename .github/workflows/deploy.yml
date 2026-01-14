@@ -28,6 +28,8 @@ jobs:
       DATABASE_URL: ${{ format('postgresql://{0}:{1}@db:5432/{2}', secrets.POSTGRES_USER || vars.POSTGRES_USER, secrets.POSTGRES_PASSWORD || vars.POSTGRES_PASSWORD, secrets.POSTGRES_DB || vars.POSTGRES_DB) }}
       BUILD_DATABASE_URL: ${{ format('postgresql://{0}:{1}@db:5432/{2}', secrets.POSTGRES_USER || vars.POSTGRES_USER, secrets.POSTGRES_PASSWORD || vars.POSTGRES_PASSWORD, secrets.POSTGRES_DB || vars.POSTGRES_DB) }}
       RAILS_MASTER_KEY: ${{ secrets.RAILS_MASTER_KEY || vars.RAILS_MASTER_KEY }}
+      GOOGLE_CLIENT_ID: ${{ secrets.GOOGLE_CLIENT_ID || vars.GOOGLE_CLIENT_ID }}
+      GOOGLE_CLIENT_SECRET: ${{ secrets.GOOGLE_CLIENT_SECRET || vars.GOOGLE_CLIENT_SECRET }}
     steps:
       - name: Verify required configuration
         run: |
@@ -39,6 +41,8 @@ jobs:
           : "${DATABASE_URL:?DATABASE_URL is required}"
           : "${BUILD_DATABASE_URL:?BUILD_DATABASE_URL is required}"
           : "${RAILS_MASTER_KEY:?RAILS_MASTER_KEY is required}"
+          : "${GOOGLE_CLIENT_ID:+set}" >/dev/null || true
+          : "${GOOGLE_CLIENT_SECRET:+set}" >/dev/null || true
       - name: Checkout
         uses: actions/checkout@v4
         with:
@@ -56,6 +60,8 @@ jobs:
           WEB_PORT=${{ vars.WEB_PORT || '3001' }}
           WEB_CONCURRENCY=${{ vars.WEB_CONCURRENCY || '2' }}
           DATABASE_URL=${{ env.DATABASE_URL }}
+          GOOGLE_CLIENT_ID=${{ env.GOOGLE_CLIENT_ID || '' }}
+          GOOGLE_CLIENT_SECRET=${{ env.GOOGLE_CLIENT_SECRET || '' }}
           ENVFILE
           chmod 600 .env.production
 
