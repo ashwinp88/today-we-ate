@@ -1,45 +1,56 @@
-<section class="auth-wrap">
-  <div class="auth-card">
-    <div class="auth-illustration signup" style="<%= session_background_asset.present? ? "background-image: url(#{asset_path(session_background_asset)});" : "background-image: url(#{asset_path('banner-1600.jpg')});" %>">
-      <div class="auth-hero-copy">
-        <h2>Make delicious habits</h2>
-        <p>Log once. Decide what’s next faster.</p>
+<% background_asset = session_background_asset.presence || "banner-1600.jpg" %>
+
+<div class="flex w-full justify-center px-4">
+  <div class="w-full max-w-2xl space-y-8 rounded-[38px] border border-white/40 bg-white/35 p-10 shadow-[0_35px_90px_rgba(15,23,42,0.4)] backdrop-blur-2xl" style="background-image: linear-gradient(to bottom, rgba(0,0,0,0.25), transparent);">
+    <div class="space-y-2 text-center">
+      <p class="theme-heading text-4xl font-semibold tracking-tight">Create a Today We Ate account</p>
+      <p class="theme-subtext text-base font-medium">Log what you eat, remember what you love.</p>
+    </div>
+
+    <% if flash[:alert].present? %>
+      <div class="rounded-2xl border border-red-200 bg-red-50/90 px-4 py-3 text-sm font-semibold text-red-700"><%= flash[:alert] %></div>
+    <% end %>
+
+    <%= form_with model: @user, url: signup_path, class: "space-y-4" do |f| %>
+      <div>
+        <%= f.label :name, "Name", class: "sr-only" %>
+        <%= f.text_field :name, required: true, autocomplete: "name", placeholder: "Your name", class: "w-full rounded-full border border-slate-200 bg-white px-5 py-4 text-base text-slate-900 placeholder:text-slate-400 focus:border-indigo-500 focus:outline-none focus:ring-4 focus:ring-indigo-500/20" %>
       </div>
-    </div>
-    <div class="auth-panel">
-      <p class="eyebrow">Create account</p>
-      <h1>Join Today We Ate</h1>
-      <p class="muted">Log what you eat and discover your favorites.</p>
+      <div>
+        <%= f.label :email, "Email", class: "sr-only" %>
+        <%= f.email_field :email, required: true, autocomplete: "email", value: params[:email], placeholder: "you@example.com", class: "w-full rounded-full border border-slate-200 bg-white px-5 py-4 text-base text-slate-900 placeholder:text-slate-400 focus:border-indigo-500 focus:outline-none focus:ring-4 focus:ring-indigo-500/20" %>
+      </div>
+      <div>
+        <%= f.label :password, "Password", class: "sr-only" %>
+        <%= f.password_field :password, required: true, autocomplete: "new-password", placeholder: "Password", class: "w-full rounded-full border border-slate-200 bg-white px-5 py-4 text-base text-slate-900 placeholder:text-slate-400 focus:border-indigo-500 focus:outline-none focus:ring-4 focus:ring-indigo-500/20" %>
+      </div>
+      <div>
+        <%= f.label :password_confirmation, "Confirm password", class: "sr-only" %>
+        <%= f.password_field :password_confirmation, required: true, autocomplete: "new-password", placeholder: "Confirm password", class: "w-full rounded-full border border-slate-200 bg-white px-5 py-4 text-base text-slate-900 placeholder:text-slate-400 focus:border-indigo-500 focus:outline-none focus:ring-4 focus:ring-indigo-500/20" %>
+      </div>
+      <button type="submit" class="flex w-full items-center justify-center gap-2 rounded-full bg-slate-900 px-6 py-4 text-lg font-semibold text-white shadow-xl shadow-slate-900/30 transition hover:-translate-y-0.5 hover:bg-slate-800">
+        Create account
+        <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14" /><path d="m13 6 6 6-6 6" /></svg>
+      </button>
+    <% end %>
 
-      <%= form_with model: @user, url: signup_path, class: "stack gap-sm auth-form" do |f| %>
-        <div class="field-group">
-          <%= f.label :name, "Name" %>
-          <%= f.text_field :name, required: true, autocomplete: "name" %>
+    <% if oauth_provider_enabled?(:google_oauth2) %>
+      <div class="space-y-4">
+        <div class="flex items-center gap-4 text-xs font-semibold uppercase tracking-[0.35em] theme-accent">
+          <span class="h-px flex-1 theme-accent-line"></span>
+          <span>or continue another way</span>
+          <span class="h-px flex-1 theme-accent-line"></span>
         </div>
-        <div class="field-group">
-          <%= f.label :email, "Email" %>
-          <%= f.email_field :email, required: true, autocomplete: "email", value: params[:email] %>
-        </div>
-        <div class="field-group">
-          <%= f.label :password, "Password" %>
-          <%= f.password_field :password, required: true, autocomplete: "new-password" %>
-        </div>
-        <div class="field-group">
-          <%= f.label :password_confirmation, "Confirm password" %>
-          <%= f.password_field :password_confirmation, required: true, autocomplete: "new-password" %>
-        </div>
-        <%= f.submit "Create account", class: "btn primary wide" %>
-      <% end %>
+        <%= link_to "/auth/google_oauth2", data: { turbo: false }, class: "flex items-center justify-between rounded-full border border-slate-200 bg-white px-6 py-4 text-lg font-semibold text-slate-900 shadow-lg shadow-slate-900/10 transition hover:-translate-y-0.5 hover:shadow-2xl" do %>
+          <span class="flex items-center gap-3">
+            <span class="inline-flex h-8 w-8 items-center justify-center rounded-full bg-white"><%= image_tag "google.svg", alt: "Google" rescue 'G' %></span>
+            Sign up with Google
+          </span>
+          <svg class="h-5 w-5 text-slate-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14" /><path d="m13 6 6 6-6 6" /></svg>
+        <% end %>
+      </div>
+    <% end %>
 
-      <div class="or">or</div>
-
-      <% if oauth_provider_enabled?(:google_oauth2) %>
-        <div class="oauth-buttons">
-          <%= link_to "Sign up with Google", "/auth/google_oauth2", class: "btn wide", data: { turbo: false } %>
-        </div>
-      <% end %>
-
-      <p class="muted small">Already have an account? <%= link_to "Sign in", login_path %></p>
-    </div>
+    <p class="theme-subtext text-sm text-center">Already have an account? <%= link_to "Sign in", login_path, class: "font-semibold underline-offset-4 hover:underline" %></p>
   </div>
-</section>
+</div>

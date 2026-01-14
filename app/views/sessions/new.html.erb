@@ -2,9 +2,9 @@
 
 <div class="flex w-full justify-center px-4">
   <div class="w-full max-w-2xl space-y-8 rounded-[38px] border border-white/40 bg-white/35 p-10 shadow-[0_35px_90px_rgba(15,23,42,0.4)] backdrop-blur-2xl" style="background-image: linear-gradient(to bottom, rgba(0,0,0,0.25), transparent);">
-    <div class="space-y-2 text-center text-white/95">
-      <p class="text-6xl font-semibold tracking-tight">Today We Ate</p>
-      <p class="text-base font-medium">Sign in to keep tracking your meals.</p>
+    <div class="space-y-2 text-center">
+      <p class="theme-heading text-6xl font-semibold tracking-tight">Today We Ate</p>
+      <p class="theme-subtext text-base font-medium">Sign in to keep tracking your meals.</p>
     </div>
 
     <% if flash[:alert].present? %>
@@ -21,10 +21,10 @@
       <% end %>
     <% end %>
 
-    <div class="flex items-center gap-4 text-xs font-semibold uppercase tracking-[0.35em] text-white/95">
-      <span class="h-px flex-1 bg-slate-200"></span>
+    <div class="flex items-center gap-4 text-xs font-semibold uppercase tracking-[0.35em] theme-accent">
+      <span class="h-px flex-1 theme-accent-line"></span>
       <span>or continue with email</span>
-      <span class="h-px flex-1 bg-slate-200"></span>
+      <span class="h-px flex-1 theme-accent-line"></span>
     </div>
 
     <%= form_with url: email_login_path, method: :post, class: "space-y-4" do %>
@@ -46,7 +46,7 @@
       <%= link_to "Developer sign in", "/auth/developer", class: "block text-center text-sm font-semibold text-slate-600 underline-offset-4 hover:text-slate-800 hover:underline", data: { turbo: false } %>
     <% end %>
 
-    <p class="text-sm text-center text-white/95">No credit card required. Cancel anytime.</p>
-    <p class="text-sm text-center text-white/95">Don't have an account? <%= link_to "Create one", signup_path(email: params[:email]), class: "font-semibold underline-offset-4 hover:underline" %></p>
+    <p class="theme-subtext text-sm text-center">No credit card required. Cancel anytime.</p>
+    <p class="theme-subtext text-sm text-center">Don't have an account? <%= link_to "Create one", signup_path(email: params[:email]), class: "font-semibold underline-offset-4 hover:underline" %></p>
   </div>
 </div>

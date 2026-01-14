@@ -26,33 +26,18 @@
   <% auth_page = controller_name == 'sessions' && action_name == 'new' %>
   <% immersive_background_page = landing_page || auth_page %>
   <% background_image_for_body = asset_path(session_background_asset.presence || 'banner-1600.jpg') %>
-  <body class="min-h-screen bg-slate-50 text-slate-900 relative z-0" style="<%= immersive_background_page ? "background-image: url('#{background_image_for_body}'); background-size: cover; background-position: center; background-attachment: fixed;" : nil %>">
-    <% if session_background_asset.present? && !immersive_background_page %>
-      <!-- selected background: <%= session_background_asset %> -->
-      <style>
-        body::before {
-          content: "";
-          position: fixed;
-          inset: 0;
-          z-index: -1;
-          background-image: url('<%= asset_path(session_background_asset) %>');
-          background-size: cover;
-          background-position: center;
-          filter: blur(5px) saturate(110%);
-          pointer-events: none;
-        }
-      </style>
-    <% end %>
+  <% overlay_style = "background-image: linear-gradient(to bottom, rgba(0,0,0,0.45), rgba(0,0,0,0.15)), url('#{background_image_for_body}'); background-size: cover; background-position: center; background-attachment: fixed;" %>
+  <body data-theme="white" class="min-h-screen text-white relative z-0" style="<%= overlay_style %>">
     <% show_header = (user_signed_in? || !(controller_name == 'dashboard' && action_name == 'show')) && !immersive_background_page %>
     <% if show_header %>
-      <header class="sticky top-0 z-40 border-b border-slate-200 bg-white/80 backdrop-blur">
-        <div class="mx-auto flex max-w-6xl items-center justify-end gap-4 px-4 py-3 text-sm font-medium text-slate-600">
+      <header class="sticky top-0 z-40 border-b border-white/20 bg-white/5 backdrop-blur">
+        <div class="mx-auto flex max-w-6xl items-center justify-end gap-4 px-4 py-3 text-sm font-semibold text-white/80">
           <% if user_signed_in? %>
-            <%= link_to "Dashboard", root_path, class: "hover:text-slate-900" %>
-            <%= link_to "Meals", meals_path, class: "hover:text-slate-900" %>
-            <%= link_to "Sign out", sign_out_path, data: { turbo_method: :delete }, class: "text-red-600 hover:text-red-700" %>
+            <%= link_to "Dashboard", root_path, class: "hover:text-white" %>
+            <%= link_to "Meals", meals_path, class: "hover:text-white" %>
+            <%= link_to "Sign out", sign_out_path, data: { turbo_method: :delete }, class: "text-red-200 hover:text-red-100" %>
           <% else %>
-            <%= link_to "Sign in", login_path, class: "rounded-full border border-slate-300 px-4 py-1 text-slate-700 hover:bg-slate-100" %>
+            <%= link_to "Sign in", login_path, class: "rounded-full border border-white/40 px-4 py-1 text-white hover:bg-white/10" %>
           <% end %>
         </div>
       </header>
