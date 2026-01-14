@@ -22,16 +22,19 @@
     <%= javascript_importmap_tags %>
   </head>
 
-  <body class="min-h-screen bg-slate-50 text-slate-900">
-    <% landing_page = controller_name == 'dashboard' && action_name == 'show' && !user_signed_in? %>
-    <% if session_background_asset.present? && !landing_page %>
+  <% landing_page = controller_name == 'dashboard' && action_name == 'show' && !user_signed_in? %>
+  <% auth_page = controller_name == 'sessions' && action_name == 'new' %>
+  <% immersive_background_page = landing_page || auth_page %>
+  <% background_image_for_body = asset_path(session_background_asset.presence || 'banner-1600.jpg') %>
+  <body class="min-h-screen bg-slate-50 text-slate-900 relative z-0" style="<%= immersive_background_page ? "background-image: url('#{background_image_for_body}'); background-size: cover; background-position: center; background-attachment: fixed;" : nil %>">
+    <% if session_background_asset.present? && !immersive_background_page %>
       <!-- selected background: <%= session_background_asset %> -->
       <style>
         body::before {
           content: "";
           position: fixed;
           inset: 0;
-          z-index: 0;
+          z-index: -1;
           background-image: url('<%= asset_path(session_background_asset) %>');
           background-size: cover;
           background-position: center;
@@ -40,7 +43,7 @@
         }
       </style>
     <% end %>
-    <% show_header = user_signed_in? || !(controller_name == 'dashboard' && action_name == 'show') %>
+    <% show_header = (user_signed_in? || !(controller_name == 'dashboard' && action_name == 'show')) && !immersive_background_page %>
     <% if show_header %>
       <header class="sticky top-0 z-40 border-b border-slate-200 bg-white/80 backdrop-blur">
         <div class="mx-auto flex max-w-6xl items-center justify-end gap-4 px-4 py-3 text-sm font-medium text-slate-600">
@@ -55,7 +58,12 @@
       </header>
     <% end %>
 
-    <main class="<%= landing_page ? "" : "mx-auto max-w-6xl px-4 py-10" %>">
+    <% main_classes = if immersive_background_page
+        "relative z-10 flex min-h-[90vh] w-full items-center justify-center px-4 py-16"
+      else
+        "mx-auto max-w-6xl px-4 py-10"
+      end %>
+    <main class="<%= main_classes %>">
       <%= yield %>
     </main>
   </body>
