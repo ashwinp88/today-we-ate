@@ -11,7 +11,7 @@
       <div class="rounded-2xl border border-red-200 bg-red-50/90 px-4 py-3 text-sm font-semibold text-red-700"><%= flash[:alert] %></div>
     <% end %>
 
-    <%= form_with model: @user, url: signup_path, class: "space-y-4" do |f| %>
+    <%= form_with model: @user, url: email_signup_path, class: "space-y-4" do |f| %>
       <div>
         <%= f.label :name, "Name", class: "sr-only" %>
         <%= f.text_field :name, required: true, autocomplete: "name", placeholder: "Your name", class: "w-full rounded-full border border-slate-200 bg-white px-5 py-4 text-base text-slate-900 placeholder:text-slate-400 focus:border-indigo-500 focus:outline-none focus:ring-4 focus:ring-indigo-500/20" %>

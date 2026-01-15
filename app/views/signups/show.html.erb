@@ -4,12 +4,8 @@
   <div class="w-full max-w-2xl space-y-8 rounded-[38px] border border-white/40 bg-white/35 p-10 shadow-[0_35px_90px_rgba(15,23,42,0.4)] backdrop-blur-2xl" style="background-image: linear-gradient(to bottom, rgba(0,0,0,0.25), transparent);">
     <div class="space-y-2 text-center">
       <p class="theme-heading text-6xl font-semibold tracking-tight">Today We Ate</p>
-      <p class="theme-subtext text-base font-medium">Sign in to keep tracking your meals.</p>
+      <p class="theme-subtext text-base font-medium">Track your meals and discover favorites.</p>
     </div>
-
-    <% if flash[:alert].present? %>
-      <div class="rounded-2xl border border-red-200 bg-red-50/90 px-4 py-3 text-sm font-semibold text-red-700"><%= flash[:alert] %></div>
-    <% end %>
 
     <% if oauth_provider_enabled?(:google_oauth2) %>
       <%= link_to "/auth/google_oauth2", data: { turbo: false }, class: "flex items-center justify-between rounded-full border border-slate-200 bg-white px-6 py-4 text-lg font-semibold text-slate-900 shadow-lg shadow-slate-900/10 transition hover:-translate-y-0.5 hover:shadow-2xl" do %>
@@ -27,14 +23,10 @@
       <span class="h-px flex-1 theme-accent-line"></span>
     </div>
 
-    <%= form_with url: email_login_path, method: :post, class: "space-y-4" do %>
+    <%= form_with url: preauth_path, method: :post, class: "space-y-4" do %>
       <div>
         <%= label_tag :email, "Email", class: "sr-only" %>
         <%= email_field_tag :email, params[:email], required: true, autocomplete: "email", placeholder: "you@example.com", class: "w-full rounded-full border border-slate-200 bg-white px-5 py-4 text-base text-slate-900 placeholder:text-slate-400 focus:border-indigo-500 focus:outline-none focus:ring-4 focus:ring-indigo-500/20" %>
-      </div>
-      <div>
-        <%= label_tag :password, "Password", class: "sr-only" %>
-        <%= password_field_tag :password, nil, required: true, autocomplete: "current-password", placeholder: "••••••••", class: "w-full rounded-full border border-slate-200 bg-white px-5 py-4 text-base text-slate-900 placeholder:text-slate-400 focus:border-indigo-500 focus:outline-none focus:ring-4 focus:ring-indigo-500/20" %>
       </div>
       <button type="submit" class="flex w-full items-center justify-center gap-2 rounded-full bg-slate-900 px-6 py-4 text-lg font-semibold text-white shadow-xl shadow-slate-900/30 transition hover:-translate-y-0.5 hover:bg-slate-800">
         Continue
@@ -42,11 +34,6 @@
       </button>
     <% end %>
 
-    <% unless Rails.env.production? %>
-      <%= link_to "Developer sign in", "/auth/developer", class: "block text-center text-sm font-semibold text-slate-600 underline-offset-4 hover:text-slate-800 hover:underline", data: { turbo: false } %>
-    <% end %>
-
-    <p class="theme-subtext text-sm text-center">No credit card required. Cancel anytime.</p>
-    <p class="theme-subtext text-sm text-center">Don't have an account? <%= link_to "Create one", email_signup_path(email: params[:email]), class: "font-semibold underline-offset-4 hover:underline" %></p>
+    <p class="theme-subtext text-center text-sm font-medium">No credit card required. Cancel anytime.</p>
   </div>
 </div>
