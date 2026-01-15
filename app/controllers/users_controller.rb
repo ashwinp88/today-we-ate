@@ -11,7 +11,7 @@ class UsersController < ApplicationController
     if @user.save
       reset_session
       session[:user_id] = @user.id
-      redirect_to root_path, notice: "Welcome, #{@user.first_name}!"
+      redirect_to home_path, notice: "Welcome, #{@user.first_name}!"
     else
       flash.now[:alert] = @user.errors.full_messages.to_sentence
       render :new, status: :unprocessable_entity

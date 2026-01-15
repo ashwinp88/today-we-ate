@@ -22,3 +22,46 @@
 .glassy-chip--subtle {
   --chip-opacity: 0.25;
 }
+
+body[data-theme] {
+  color: var(--twa-body-color, #0f172a);
+  background-color: var(--twa-surface-color, #0f172a);
+}
+
+body[data-theme='baseline'] {
+  --twa-body-color: #0f172a;
+  --twa-title-color: #0f172a;
+  --twa-subtext-color: #475569;
+  --twa-accent-color: #0f172a;
+  --twa-divider-color: rgba(15, 23, 42, 0.18);
+  --twa-surface-color: #f8fafc;
+}
+
+body[data-theme='white'] {
+  --twa-body-color: rgba(255, 255, 255, 0.9);
+  --twa-title-color: rgba(255, 255, 255, 0.95);
+  --twa-subtext-color: rgba(255, 255, 255, 0.75);
+  --twa-accent-color: rgba(255, 255, 255, 0.85);
+  --twa-divider-color: rgba(255, 255, 255, 0.3);
+  --twa-surface-color: #0f172a;
+}
+
+.theme-heading {
+  color: var(--twa-title-color);
+}
+
+.theme-subtext {
+  color: var(--twa-subtext-color);
+}
+
+.theme-accent {
+  color: var(--twa-accent-color);
+}
+
+.theme-accent-line {
+  background-color: var(--twa-divider-color);
+}
+
+.theme-caption {
+  color: var(--twa-subtext-color);
+}

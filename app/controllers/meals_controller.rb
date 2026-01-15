@@ -12,7 +12,7 @@ class MealsController < ApplicationController
   def create
     @meal = current_user.meals.build(meal_params)
     if @meal.save
-      redirect_to root_path, notice: "Meal logged!"
+      redirect_to home_path, notice: "Meal logged!"
     else
       flash.now[:alert] = @meal.errors.full_messages.to_sentence
       render :new, status: :unprocessable_entity

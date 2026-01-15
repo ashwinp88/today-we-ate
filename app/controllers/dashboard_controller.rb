@@ -1,7 +1,7 @@
 class DashboardController < ApplicationController
-  def show
-    return unless user_signed_in?
+  before_action :require_authentication!
 
+  def show
     @meal = current_user.meals.build(ate_on: Date.current, source: :home)
     analytics = MealAnalytics.new(current_user)
     @top_meals = analytics.top_meals
