@@ -51,14 +51,16 @@
     <% end %>
 
     <% main_classes = if immersive_background_page
-        "relative z-10 flex min-h-[90vh] w-full items-center justify-center px-4 py-16"
+        "relative z-10 flex min-h-[90vh] w-full items-center justify-center px-4 py-10 sm:py-16"
       else
         "mx-auto max-w-6xl px-4 py-10"
       end %>
-    <main class="<%= main_classes %>">
-      <%= yield %>
-    </main>
+    <div class="<%= immersive_background_page ? "min-h-screen flex flex-col" : "" %>">
+      <main class="flex-1 <%= main_classes %>">
+        <%= yield %>
+      </main>
 
-    <%= render "shared/footer" %>
+      <%= render "shared/footer" %>
+    </div>
   </body>
 </html>

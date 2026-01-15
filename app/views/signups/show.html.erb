@@ -1,14 +1,14 @@
 <% background_asset = session_background_asset.presence || "banner-1600.jpg" %>
 
 <div class="flex w-full justify-center px-4">
-  <div class="w-full max-w-2xl space-y-8 rounded-[38px] border border-white/40 bg-white/35 p-10 shadow-[0_35px_90px_rgba(15,23,42,0.4)] backdrop-blur-2xl" style="background-image: linear-gradient(to bottom, rgba(0,0,0,0.25), transparent);">
+  <div class="w-full max-w-md space-y-6 rounded-[32px] border border-white/40 bg-white/35 p-6 shadow-[0_30px_90px_rgba(15,23,42,0.4)] backdrop-blur-2xl sm:max-w-xl sm:space-y-8 sm:p-10" style="background-image: linear-gradient(to bottom, rgba(0,0,0,0.25), transparent);">
     <div class="space-y-2 text-center">
-      <p class="theme-heading text-6xl font-semibold tracking-tight">Today We Ate</p>
+      <p class="theme-heading text-4xl font-semibold tracking-tight sm:text-6xl">Today We Ate</p>
       <p class="theme-subtext text-base font-medium">Track your meals and discover favorites.</p>
     </div>
 
     <% if oauth_provider_enabled?(:google_oauth2) %>
-      <%= link_to "/auth/google_oauth2", data: { turbo: false }, class: "flex items-center justify-between rounded-full border border-slate-200 bg-white px-6 py-4 text-lg font-semibold text-slate-900 shadow-lg shadow-slate-900/10 transition hover:-translate-y-0.5 hover:shadow-2xl" do %>
+      <%= link_to "/auth/google_oauth2", data: { turbo: false }, class: "flex w-full items-center justify-between rounded-full border border-white/30 bg-white px-4 py-3 text-base font-semibold text-slate-900 shadow-lg shadow-slate-900/10 transition hover:-translate-y-0.5 hover:shadow-2xl sm:px-6 sm:py-4 sm:text-lg" do %>
         <span class="flex items-center gap-3">
           <span class="inline-flex h-8 w-8 items-center justify-center rounded-full bg-white"><%= image_tag "google.svg", alt: "Google" rescue 'G' %></span>
           Continue with Google
@@ -26,9 +26,9 @@
     <%= form_with url: preauth_path, method: :post, class: "space-y-4" do %>
       <div>
         <%= label_tag :email, "Email", class: "sr-only" %>
-        <%= email_field_tag :email, params[:email], required: true, autocomplete: "email", placeholder: "you@example.com", class: "w-full rounded-full border border-slate-200 bg-white px-5 py-4 text-base text-slate-900 placeholder:text-slate-400 focus:border-indigo-500 focus:outline-none focus:ring-4 focus:ring-indigo-500/20" %>
+        <%= email_field_tag :email, params[:email], required: true, autocomplete: "email", placeholder: "you@example.com", class: "w-full rounded-full border border-white/30 bg-white/80 px-4 py-3 text-base text-slate-900 placeholder:text-slate-400 focus:border-indigo-500 focus:outline-none focus:ring-4 focus:ring-indigo-500/20 sm:px-5 sm:py-4" %>
       </div>
-      <button type="submit" class="flex w-full items-center justify-center gap-2 rounded-full bg-slate-900 px-6 py-4 text-lg font-semibold text-white shadow-xl shadow-slate-900/30 transition hover:-translate-y-0.5 hover:bg-slate-800">
+      <button type="submit" class="flex w-full items-center justify-center gap-2 rounded-full bg-slate-900 px-5 py-3 text-base font-semibold text-white shadow-xl shadow-slate-900/30 transition hover:-translate-y-0.5 hover:bg-slate-800 sm:px-6 sm:py-4 sm:text-lg">
         Continue
         <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14" /><path d="m13 6 6 6-6 6" /></svg>
       </button>
