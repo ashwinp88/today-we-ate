@@ -22,19 +22,26 @@
     <%= javascript_importmap_tags %>
   </head>
 
-  <% landing_page = controller_name == 'dashboard' && action_name == 'show' && !user_signed_in? %>
+  <% landing_page = controller_name == 'signups' && action_name == 'show' %>
   <% auth_page = controller_name == 'sessions' && action_name == 'new' %>
-  <% immersive_background_page = landing_page || auth_page %>
+  <% email_signup_page = controller_name == 'users' && action_name == 'new' %>
+  <% on_home_page = controller_name == 'dashboard' && action_name == 'show' %>
+  <% on_meals_page = controller_name == 'meals' %>
+  <% immersive_background_page = landing_page || auth_page || email_signup_page %>
   <% background_image_for_body = asset_path(session_background_asset.presence || 'banner-1600.jpg') %>
   <% overlay_style = "background-image: linear-gradient(to bottom, rgba(0,0,0,0.45), rgba(0,0,0,0.15)), url('#{background_image_for_body}'); background-size: cover; background-position: center; background-attachment: fixed;" %>
   <body data-theme="white" class="min-h-screen text-white relative z-0" style="<%= overlay_style %>">
-    <% show_header = (user_signed_in? || !(controller_name == 'dashboard' && action_name == 'show')) && !immersive_background_page %>
+    <% show_header = (user_signed_in? || !landing_page) && !immersive_background_page %>
     <% if show_header %>
       <header class="sticky top-0 z-40 border-b border-white/20 bg-white/5 backdrop-blur">
         <div class="mx-auto flex max-w-6xl items-center justify-end gap-4 px-4 py-3 text-sm font-semibold text-white/80">
           <% if user_signed_in? %>
-            <%= link_to "Dashboard", root_path, class: "hover:text-white" %>
-            <%= link_to "Meals", meals_path, class: "hover:text-white" %>
+            <% unless on_home_page %>
+              <%= link_to "Home", home_path, class: "hover:text-white" %>
+            <% end %>
+            <% unless on_meals_page %>
+              <%= link_to "Meals", meals_path, class: "hover:text-white" %>
+            <% end %>
             <%= link_to "Sign out", sign_out_path, data: { turbo_method: :delete }, class: "text-red-200 hover:text-red-100" %>
           <% else %>
             <%= link_to "Sign in", login_path, class: "rounded-full border border-white/40 px-4 py-1 text-white hover:bg-white/10" %>
@@ -51,5 +58,7 @@
     <main class="<%= main_classes %>">
       <%= yield %>
     </main>
+
+    <%= render "shared/footer" %>
   </body>
 </html>
