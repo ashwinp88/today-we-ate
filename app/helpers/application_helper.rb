@@ -25,13 +25,13 @@ module ApplicationHelper
     end
 
     stars = content_tag(:div, class: "relative inline-flex #{gap_class}") do
-      safe_join([outline_layer, fill_layer])
+      safe_join([ outline_layer, fill_layer ])
     end
 
     label_class = show_label ? "text-xs font-medium text-slate-500" : "sr-only"
     label = content_tag(:span, format("%.1f / 5", value), class: label_class)
 
-    safe_join([stars, label], " ")
+    safe_join([ stars, label ], " ")
   end
 
   def star_outline_svg(size_class = "h-5 w-5")

@@ -42,5 +42,4 @@ class ApplicationController < ActionController::Base
       Rails.logger.info("[BG] No session background candidates were loaded at boot")
     end
   end
-
 end
