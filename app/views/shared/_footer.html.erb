@@ -1,3 +1,5 @@
-<footer class="mt-6 border-t border-white/10 px-4 py-6 text-center text-xs text-white/70">
+<% immersive = local_assigns.fetch(:immersive, false) %>
+<% position_class = immersive ? "sticky bottom-0 w-full bg-white/5 backdrop-blur" : "mt-6" %>
+<footer class="<%= [ position_class, "border-t border-white/10 px-4 py-6 text-center text-xs text-white/70" ].join(' ') %>">
   © <%= Time.current.year %> Bit Cube Technologies Inc. All rights reserved.
 </footer>

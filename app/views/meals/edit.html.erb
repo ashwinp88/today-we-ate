@@ -1,0 +1,15 @@
+<div class="flex w-full justify-center">
+  <section class="w-full max-w-3xl rounded-[32px] border border-white/40 bg-white/85 p-6 shadow-xl backdrop-blur sm:p-8">
+    <header class="mb-4 text-slate-900">
+      <p class="text-xs font-semibold uppercase tracking-[0.3em] text-slate-500">Edit meal</p>
+      <h1 class="mt-1 text-2xl font-semibold">Update this entry</h1>
+      <p class="text-sm text-slate-500">Tweak the details or rating, then hit save.</p>
+    </header>
+
+    <%= render "form", meal: @meal %>
+
+    <p class="mt-4 text-center text-sm text-slate-500">
+      <%= link_to "Back to history", meals_path, class: "font-semibold text-slate-900" %>
+    </p>
+  </section>
+</div>

@@ -1,5 +1,5 @@
 @layer utilities {
-  .auth-card-base {
+  .auth-card {
     @apply w-full max-w-2xl rounded-[32px] border border-white/30 bg-white/35 p-8 shadow-[0_30px_90px_rgba(15,23,42,0.35)] backdrop-blur-2xl sm:p-10;
   }
   .auth-card-heading {

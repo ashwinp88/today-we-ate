@@ -20,7 +20,7 @@ class SessionsController < ApplicationController
   def create
     auth_hash = request.env["omniauth.auth"]
     if auth_hash.blank?
-      redirect_to signup_path, alert: "Missing authentication data."
+      redirect_to landing_path, alert: "Missing authentication data."
       return
     end
 
@@ -31,15 +31,15 @@ class SessionsController < ApplicationController
     redirect_to home_path, notice: "Welcome back, #{user.first_name}!"
   rescue StandardError => e
     Rails.logger.error("Authentication failure: #{e.message}")
-    redirect_to signup_path, alert: "We couldn't sign you in. Please try again."
+    redirect_to landing_path, alert: "We couldn't sign you in. Please try again."
   end
 
   def destroy
     reset_session
-    redirect_to signup_path, notice: "Signed out successfully."
+    redirect_to landing_path, notice: "Signed out successfully."
   end
 
   def failure
-    redirect_to signup_path, alert: params[:message] || "Login failed."
+    redirect_to landing_path, alert: params[:message] || "Login failed."
   end
 end

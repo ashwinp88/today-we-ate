@@ -23,26 +23,25 @@
   </head>
 
   <% landing_page = controller_name == 'signups' && action_name == 'show' %>
-  <% auth_page = controller_name == 'sessions' && action_name == 'new' %>
-  <% email_signup_page = controller_name == 'users' && action_name == 'new' %>
+  <% auth_page = controller_name == 'sessions' && %w[new email].include?(action_name) %>
+  <% email_signup_page = controller_name == 'users' && %w[new create].include?(action_name) %>
   <% on_home_page = controller_name == 'dashboard' && action_name == 'show' %>
   <% on_meals_page = controller_name == 'meals' %>
   <% immersive_background_page = landing_page || auth_page || email_signup_page %>
+  <% full_height_page = immersive_background_page || controller_name.in?(%w[dashboard meals]) %>
   <% background_image_for_body = asset_path(session_background_asset.presence || 'banner-1600.jpg') %>
   <% overlay_style = "background-image: linear-gradient(to bottom, rgba(0,0,0,0.45), rgba(0,0,0,0.15)), url('#{background_image_for_body}'); background-size: cover; background-position: center; background-attachment: fixed;" %>
-  <body data-theme="white" class="min-h-screen text-white relative z-0" style="<%= overlay_style %>">
-    <% show_header = (user_signed_in? || !landing_page) && !immersive_background_page %>
+  <body data-theme="white" class="relative z-0 min-h-screen overflow-y-auto text-white" style="<%= overlay_style %>">
+    <% show_header = !immersive_background_page && (user_signed_in? || !landing_page) %>
     <% if show_header %>
       <header class="sticky top-0 z-40 border-b border-white/20 bg-white/5 backdrop-blur">
         <div class="mx-auto flex max-w-6xl items-center justify-end gap-4 px-4 py-3 text-sm font-semibold text-white/80">
           <% if user_signed_in? %>
-            <% unless on_home_page %>
-              <%= link_to "Home", home_path, class: "hover:text-white" %>
-            <% end %>
-            <% unless on_meals_page %>
-              <%= link_to "Meals", meals_path, class: "hover:text-white" %>
-            <% end %>
-            <%= link_to "Sign out", sign_out_path, data: { turbo_method: :delete }, class: "text-red-200 hover:text-red-100" %>
+            <% nav_links = [] %>
+            <% nav_links << link_to("Home", home_path, class: ["hover:text-white", on_home_page ? "text-white" : "text-white/70"].join(" ")) %>
+            <% nav_links << link_to("History", meals_path, class: ["hover:text-white", on_meals_page ? "text-white" : "text-white/70"].join(" ")) %>
+            <% nav_links << link_to("Sign out", sign_out_path, data: { turbo_method: :delete }, class: "text-red-200 hover:text-red-100") %>
+            <%= safe_join(nav_links, content_tag(:span, "|", class: "px-3 text-white/40")) %>
           <% else %>
             <%= link_to "Sign in", login_path, class: "rounded-full border border-white/40 px-4 py-1 text-white hover:bg-white/10" %>
           <% end %>
@@ -53,14 +52,14 @@
     <% main_classes = if immersive_background_page
         "relative z-10 flex min-h-[90vh] w-full items-center justify-center px-4 py-10 sm:py-16"
       else
-        "mx-auto max-w-6xl px-4 py-10"
+        "mx-auto flex w-full max-w-6xl flex-col gap-5 px-4 py-4 pb-1"
       end %>
-    <div class="<%= immersive_background_page ? "min-h-screen flex flex-col" : "" %>">
+    <div class="<%= full_height_page ? "min-h-screen flex flex-col" : "" %>">
       <main class="flex-1 <%= main_classes %>">
         <%= yield %>
       </main>
 
-      <%= render "shared/footer" %>
+      <%= render "shared/footer", immersive: full_height_page %>
     </div>
   </body>
 </html>

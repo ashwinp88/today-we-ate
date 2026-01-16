@@ -21,7 +21,7 @@ class ApplicationController < ActionController::Base
   def require_authentication!
     return if user_signed_in?
 
-    redirect_to signup_path, alert: "Please sign in to continue."
+    redirect_to landing_path, alert: "Please sign in to continue."
   end
 
   def session_background_asset
@@ -42,5 +42,4 @@ class ApplicationController < ActionController::Base
       Rails.logger.info("[BG] No session background candidates were loaded at boot")
     end
   end
-
 end

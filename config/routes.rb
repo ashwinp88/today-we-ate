@@ -10,11 +10,11 @@ Rails.application.routes.draw do
     [ 404, { "Content-Type" => "application/json" }, [ '{"error":"not_found"}' ] ]
   }
 
-  root to: redirect("/signup")
+  root to: redirect("/landing")
 
   get "/home", to: "dashboard#show", as: :home
 
-  resources :meals, only: %i[index new create]
+  resources :meals, only: %i[index new create edit update destroy]
 
   match "/auth/:provider/callback", to: "sessions#create", via: %i[get post]
   get "/auth/failure", to: "sessions#failure"
@@ -23,7 +23,8 @@ Rails.application.routes.draw do
   # Email/password auth
   get "/login", to: "sessions#new", as: :login
   post "/login", to: "sessions#email", as: :email_login
-  get "/signup", to: "signups#show", as: :signup
+  get "/landing", to: "signups#show", as: :landing
+  get "/signup", to: redirect("/landing")
   get "/signup/email", to: "users#new", as: :email_signup
   post "/signup/email", to: "users#create"
   post "/preauth", to: "preauths#create", as: :preauth

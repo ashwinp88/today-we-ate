@@ -2,7 +2,7 @@ class PreauthsController < ApplicationController
   def create
     email = params[:email].to_s.strip.downcase
     if email.blank?
-      redirect_to signup_path, alert: "Please enter your email"
+      redirect_to landing_path, alert: "Please enter your email"
       return
     end
 
