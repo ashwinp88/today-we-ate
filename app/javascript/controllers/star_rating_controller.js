@@ -47,10 +47,10 @@ export default class extends Controller {
     const safeValue = Math.min(this.maxValue, Math.max(this.minValue, rounded))
     this.inputTarget.value = safeValue
 
-    const percent = ((safeValue - this.minValue) / (this.maxValue - this.minValue)) * 100
-    if (this.hasFillTarget) {
-      this.fillTarget.style.width = `${percent}%`
-    }
+    this.fillTargets.forEach((fill, index) => {
+      const proportion = this.starFillAmount(safeValue, index)
+      fill.style.width = `${proportion * 100}%`
+    })
     if (this.hasDisplayTarget) {
       this.displayTarget.textContent = `${safeValue.toFixed(1)} / ${this.maxValue}`
     }
@@ -61,5 +61,9 @@ export default class extends Controller {
   roundToStep(value) {
     const stepCount = Math.round((value - this.minValue) / this.stepValue)
     return this.minValue + stepCount * this.stepValue
+  }
+
+  starFillAmount(value, index) {
+    return Math.min(Math.max(value - index, 0), 1)
   }
 }

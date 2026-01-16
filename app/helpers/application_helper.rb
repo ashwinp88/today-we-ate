@@ -10,22 +10,22 @@ module ApplicationHelper
     return content_tag(:span, "No rating", class: "text-xs text-slate-500") if rating.blank?
 
     value = rating.to_f.clamp(0.0, 5.0)
-    percent = (value / 5.0) * 100
     size_class = size == :sm ? "h-4 w-4" : "h-6 w-6"
     gap_class = size == :sm ? "gap-0.5" : "gap-1"
 
-    outline_layer = content_tag(:div, class: "flex #{gap_class} text-white/30", aria: { hidden: true }) do
-      safe_join(Array.new(5) { star_outline_svg(size_class) })
-    end
+    stars = content_tag(:div, class: "flex #{gap_class}", aria: { hidden: true }) do
+      safe_join(Array.new(5) do |index|
+        fill_percent = [[value - index, 0].max, 1].min * 100
 
-    fill_layer = content_tag(:div, class: "absolute inset-0 overflow-hidden", style: "width: #{percent}%;", aria: { hidden: true }) do
-      content_tag(:div, class: "flex #{gap_class} text-amber-300") do
-        safe_join(Array.new(5) { star_solid_svg(size_class) })
-      end
-    end
-
-    stars = content_tag(:div, class: "relative inline-flex #{gap_class}") do
-      safe_join([ outline_layer, fill_layer ])
+        content_tag(:div, class: "relative text-white/30") do
+          safe_join([
+            star_outline_svg(size_class),
+            content_tag(:div, class: "absolute inset-0 overflow-hidden text-amber-300", style: "width: #{fill_percent}%;") do
+              star_solid_svg(size_class)
+            end
+          ])
+        end
+      end)
     end
 
     label_class = show_label ? "text-xs font-medium text-slate-500" : "sr-only"

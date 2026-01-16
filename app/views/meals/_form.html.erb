@@ -13,9 +13,10 @@
       <%= form.label :rating, "Rating", class: "text-sm font-semibold text-slate-600" %>
       <div data-controller="star-rating" data-star-rating-min-value="0.5" data-star-rating-max-value="5" data-star-rating-step-value="0.5" class="mt-2 space-y-1">
         <%= form.hidden_field :rating, value: meal.rating || 4.0, data: { star_rating_target: "input" } %>
+        <% initial_rating = (meal.rating || 4.0).to_f %>
         <div class="flex items-center gap-3">
           <div
-            class="relative inline-flex cursor-pointer gap-1 text-white/20"
+            class="relative inline-flex cursor-pointer gap-1"
             data-star-rating-target="slider"
             data-action="click->star-rating#select keydown->star-rating#keydown"
             role="slider"
@@ -23,17 +24,25 @@
             aria-label="Meal rating"
             aria-valuemin="0.5"
             aria-valuemax="5"
+            aria-valuenow="<%= initial_rating %>"
           >
-            <div class="flex gap-1 text-white/25" aria-hidden="true">
-              <%= raw(Array.new(5) { star_outline_svg("h-7 w-7") }.join) %>
-            </div>
-            <div class="pointer-events-none absolute inset-0 overflow-hidden" data-star-rating-target="fill">
-              <div class="flex gap-1 text-amber-300" aria-hidden="true">
-                <%= raw(Array.new(5) { star_solid_svg("h-7 w-7") }.join) %>
+            <% 5.times do |index| %>
+              <% fill_percent = [[initial_rating - index, 0].max, 1].min * 100 %>
+              <div class="relative text-white/25" aria-hidden="true">
+                <%= star_outline_svg("h-7 w-7") %>
+                <div
+                  class="pointer-events-none absolute inset-0 overflow-hidden text-amber-300"
+                  data-star-rating-target="fill"
+                  style="width: <%= fill_percent %>%;"
+                >
+                  <%= star_solid_svg("h-7 w-7") %>
+                </div>
               </div>
-            </div>
+            <% end %>
           </div>
-          <span class="text-sm font-semibold text-slate-600" data-star-rating-target="display"></span>
+          <span class="text-sm font-semibold text-slate-600" data-star-rating-target="display">
+            <%= format("%.1f / 5", initial_rating) %>
+          </span>
         </div>
       </div>
     </div>
