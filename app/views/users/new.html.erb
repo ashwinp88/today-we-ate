@@ -1,57 +1,51 @@
-<section class="min-h-[calc(100vh-6rem)] px-4 py-14">
-  <div class="mx-auto grid max-w-5xl overflow-hidden rounded-[32px] bg-white/90 shadow-2xl ring-1 ring-black/5 md:grid-cols-2">
-    <div
-      class="relative h-64 w-full bg-cover bg-center md:h-auto"
-      style="background-image: url(<%= session_background_asset.present? ? asset_path(session_background_asset) : asset_path('banner-1600.jpg') %>);"
-    >
-      <div class="absolute inset-0 bg-gradient-to-t from-slate-900/80 via-slate-900/40 to-transparent"></div>
-      <div class="relative z-10 flex h-full flex-col justify-end gap-2 px-8 pb-8 text-white">
-        <p class="text-xs font-semibold uppercase tracking-[0.3em] text-slate-200">Create account</p>
-        <h2 class="text-3xl font-semibold leading-tight">Make delicious habits</h2>
-        <p class="text-sm text-slate-200">Log once. Decide what’s next faster.</p>
-      </div>
+<% email_value = params[:email].presence || @user.email %>
+<% error_message = if @user.errors.any?
+    @user.errors.full_messages.to_sentence
+  elsif flash[:alert].present?
+    flash[:alert]
+  end %>
+
+<div class="flex w-full justify-center px-4">
+  <div class="auth-card space-y-6 text-white sm:space-y-8" style="background-image: linear-gradient(to bottom, rgba(0,0,0,0.25), transparent);">
+    <div class="space-y-2 text-center">
+      <p class="theme-heading text-4xl font-semibold tracking-tight sm:text-5xl">Today we ate..</p>
+      <p class="theme-subtext text-base font-medium">Finish setting up your account.</p>
     </div>
 
-    <div class="space-y-6 px-8 py-10">
-      <div class="space-y-1">
-        <p class="text-xs font-semibold uppercase tracking-[0.3em] text-slate-400">Create account</p>
-        <h1 class="text-2xl font-semibold text-slate-900">Join Today We Ate</h1>
-        <p class="text-sm text-slate-500">Log what you eat and discover your favorites.</p>
+    <% if error_message.present? %>
+      <div class="rounded-2xl border border-red-300/50 bg-white/10 px-4 py-3 text-sm font-semibold text-red-100">
+        <p class="text-center"><%= error_message %></p>
       </div>
+    <% end %>
 
-      <%= form_with model: @user, url: signup_path, class: "space-y-4" do |f| %>
-        <div class="space-y-1">
-          <%= f.label :name, "Name", class: "text-sm font-medium text-slate-600" %>
-          <%= f.text_field :name, required: true, autocomplete: "name", class: "w-full rounded-full border border-slate-200 px-4 py-2.5 text-base focus:border-indigo-500 focus:ring-indigo-500" %>
-        </div>
-        <div class="space-y-1">
-          <%= f.label :email, "Email", class: "text-sm font-medium text-slate-600" %>
-          <%= f.email_field :email, required: true, autocomplete: "email", value: params[:email], class: "w-full rounded-full border border-slate-200 px-4 py-2.5 text-base focus:border-indigo-500 focus:ring-indigo-500" %>
-        </div>
-        <div class="space-y-1">
-          <%= f.label :password, "Password", class: "text-sm font-medium text-slate-600" %>
-          <%= f.password_field :password, required: true, autocomplete: "new-password", class: "w-full rounded-full border border-slate-200 px-4 py-2.5 text-base focus:border-indigo-500 focus:ring-indigo-500" %>
-        </div>
-        <div class="space-y-1">
-          <%= f.label :password_confirmation, "Confirm password", class: "text-sm font-medium text-slate-600" %>
-          <%= f.password_field :password_confirmation, required: true, autocomplete: "new-password", class: "w-full rounded-full border border-slate-200 px-4 py-2.5 text-base focus:border-indigo-500 focus:ring-indigo-500" %>
-        </div>
-        <%= f.submit "Create account", class: "w-full rounded-full bg-indigo-600 px-6 py-3 text-base font-semibold text-white shadow-lg shadow-indigo-600/30 transition hover:bg-indigo-500" %>
-      <% end %>
-
-      <div class="flex items-center gap-3 text-sm text-slate-400">
-        <span class="h-px flex-1 bg-slate-200"></span>
-        or
-        <span class="h-px flex-1 bg-slate-200"></span>
+    <%= form_with model: @user, url: email_signup_path, class: "space-y-4" do |f| %>
+      <div>
+        <%= f.label :name, "Name", class: "sr-only" %>
+        <%= f.text_field :name, required: true, autocomplete: "name", placeholder: "Full name", class: "auth-input" %>
       </div>
+      <div>
+        <%= f.label :email, "Email", class: "sr-only" %>
+        <%= f.email_field :email, required: true, autocomplete: "email", value: email_value, placeholder: "you@example.com", class: "auth-input" %>
+      </div>
+      <div data-controller="password-visibility" class="relative">
+        <%= f.label :password, "Password", class: "sr-only" %>
+        <%= f.password_field :password, required: true, autocomplete: "new-password", placeholder: "Create a password", class: "auth-input pr-16", data: { password_visibility_target: "input" } %>
+        <button type="button" class="absolute inset-y-0 right-4 text-[0.65rem] font-semibold uppercase tracking-[0.3em] text-slate-600 hover:text-slate-800" data-action="password-visibility#toggle" data-password-visibility-target="toggle" aria-pressed="false">
+          Show
+        </button>
+      </div>
+      <div data-controller="password-visibility" class="relative">
+        <%= f.label :password_confirmation, "Confirm password", class: "sr-only" %>
+        <%= f.password_field :password_confirmation, required: true, autocomplete: "new-password", placeholder: "Confirm password", class: "auth-input pr-16", data: { password_visibility_target: "input" } %>
+        <button type="button" class="absolute inset-y-0 right-4 text-[0.65rem] font-semibold uppercase tracking-[0.3em] text-slate-600 hover:text-slate-800" data-action="password-visibility#toggle" data-password-visibility-target="toggle" aria-pressed="false">
+          Show
+        </button>
+      </div>
+      <button type="submit" class="flex w-full items-center justify-center gap-2 rounded-full bg-slate-900 px-5 py-3 text-base font-semibold text-white shadow-xl shadow-slate-900/30 transition hover:-translate-y-0.5 hover:bg-slate-800 sm:px-6 sm:py-4 sm:text-lg">
+        Create account
+        <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14" /><path d="m13 6 6 6-6 6" /></svg>
+      </button>
+    <% end %>
 
-      <% if oauth_provider_enabled?(:google_oauth2) %>
-        <%= link_to "/auth/google_oauth2", data: { turbo: false }, class: "w-full rounded-full border border-slate-200 bg-white px-6 py-3 text-center text-base font-semibold text-slate-800 shadow-sm transition hover:border-slate-300" do %>
-          Sign up with Google
-        <% end %>
-      <% end %>
-
-      <p class="text-sm text-slate-500">Already have an account? <%= link_to "Sign in", login_path, class: "text-slate-900 font-semibold" %></p>
-    </div>
   </div>
-</section>
+</div>
