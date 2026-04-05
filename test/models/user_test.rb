@@ -28,4 +28,9 @@ class UserTest < ActiveSupport::TestCase
     assert_equal existing.id, user.id
     assert_equal "new-email@example.com", user.email
   end
+
+  test "following? reflects current follows" do
+    assert users(:alice).following?(users(:bob))
+    assert_not users(:bob).following?(users(:alice))
+  end
 end

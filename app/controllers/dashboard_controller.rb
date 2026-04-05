@@ -2,11 +2,18 @@ class DashboardController < ApplicationController
   before_action :require_authentication!
 
   def show
-    @meal = current_user.meals.build(ate_on: Date.current, source: :home)
-    analytics = MealAnalytics.new(current_user)
-    @top_meals = analytics.top_meals
-    @overdue_favorites = analytics.overdue_favorites
-    @source_distribution = analytics.source_distribution
-    @recent_meals = current_user.meals.order(ate_on: :desc).limit(5)
+    @dashboard = DashboardPresenter.new(user: current_user, occasion: params[:occasion])
+    track_dashboard_impressions!
+  end
+
+  private
+
+  def track_dashboard_impressions!
+    session[:recommendation_impression_signatures] ||= []
+    signature = @dashboard.impression_signature
+    return if session[:recommendation_impression_signatures].include?(signature)
+
+    @dashboard.track_impressions!
+    session[:recommendation_impression_signatures] = (session[:recommendation_impression_signatures] + [ signature ]).last(20)
   end
 end

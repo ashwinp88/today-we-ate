@@ -15,7 +15,7 @@ module ApplicationHelper
 
     stars = content_tag(:div, class: "flex #{gap_class}", aria: { hidden: true }) do
       safe_join(Array.new(5) do |index|
-        fill_percent = [[value - index, 0].max, 1].min * 100
+        fill_percent = [ [ value - index, 0 ].max, 1 ].min * 100
 
         content_tag(:div, class: "relative text-white/30") do
           safe_join([
@@ -43,6 +43,46 @@ module ApplicationHelper
   def star_solid_svg(size_class = "h-5 w-5")
     tag.svg(viewBox: "0 0 24 24", fill: "currentColor", class: size_class) do
       tag.path(d: "M12 17.27 18.18 21l-1.64-7.03L22 9.24l-7.19-.62L12 2 9.19 8.62 2 9.24l5.46 4.73L5.82 21z")
+    end
+  end
+
+  def meal_occasion_label(occasion)
+    occasion.present? ? occasion.to_s.humanize : "Any time"
+  end
+
+  def recommendation_chip_label(source_type)
+    case source_type.to_s
+    when "personal"
+      "For you"
+    when "following"
+      "Following"
+    when "popular"
+      "Popular"
+    when "fallback"
+      "Start here"
+    else
+      source_type.to_s.humanize
+    end
+  end
+
+  def meal_photo_variant(meal, size: :card)
+    return unless meal&.photo&.attached?
+
+    # Local development may not have libvips/ImageMagick available.
+    # Return the original attachment so the UI still works; CSS handles cropping.
+    meal.photo
+  end
+
+  def recommendation_chip_classes(_source_type)
+    "bg-slate-100 text-slate-600"
+  end
+
+  def thumbs_up_svg(size_class = "h-4 w-4")
+    tag.svg(viewBox: "0 0 24 24", fill: "none", stroke: "currentColor", stroke_width: "2", stroke_linecap: "round", stroke_linejoin: "round", class: size_class) do
+      safe_join([
+        tag.path(d: "M14 9V5a3 3 0 0 0-3-3l-1 5-3 4v9h11.28a2 2 0 0 0 1.97-1.62l1.38-7A2 2 0 0 0 19.66 9z"),
+        tag.path(d: "M7 22H4a2 2 0 0 1-2-2v-7a2 2 0 0 1 2-2h3")
+      ])
     end
   end
 

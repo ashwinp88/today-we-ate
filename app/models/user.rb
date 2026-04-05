@@ -1,5 +1,13 @@
 class User < ApplicationRecord
   has_many :meals, dependent: :destroy
+  has_many :active_follows, class_name: "Follow", foreign_key: :follower_id, dependent: :destroy, inverse_of: :follower
+  has_many :passive_follows, class_name: "Follow", foreign_key: :followed_id, dependent: :destroy, inverse_of: :followed
+  has_many :following, through: :active_follows, source: :followed
+  has_many :followers, through: :passive_follows, source: :follower
+  has_many :meal_likes, dependent: :destroy
+  has_many :liked_meals, through: :meal_likes, source: :meal
+  has_many :meal_comments, dependent: :destroy
+  has_many :recommendation_events, dependent: :destroy
 
   has_secure_password validations: false
 
@@ -20,6 +28,14 @@ class User < ApplicationRecord
 
   def first_name
     name.to_s.split(" ").first.presence || email.to_s.split("@").first || "Friend"
+  end
+
+  def follows?(other_user)
+    following.exists?(other_user.id)
+  end
+
+  def following?(other_user)
+    follows?(other_user)
   end
 
   private

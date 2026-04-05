@@ -1,0 +1,78 @@
+<% card = "rounded-[28px] border border-white/40 bg-white/90 p-6 shadow-sm backdrop-blur" %>
+<section class="rounded-[32px] border border-white/40 bg-white/20 p-6 text-white shadow-[0_24px_70px_rgba(15,23,42,0.35)] backdrop-blur-2xl sm:p-8">
+  <p class="text-[0.65rem] font-semibold uppercase tracking-[0.45em] text-white/70">Insights</p>
+  <h1 class="mt-2 text-3xl font-semibold leading-tight sm:text-4xl">Patterns worth keeping an eye on</h1>
+  <p class="mt-3 max-w-2xl text-sm text-white/80 sm:text-base">The point of this page is simple: show what you've been repeating, what you've been neglecting, and whether recommendations are getting any traction.</p>
+</section>
+
+<div class="grid gap-5 lg:grid-cols-3">
+  <% @top_meals.each do |window, meals| %>
+    <section class="<%= card %>">
+      <p class="text-xs font-semibold uppercase tracking-[0.3em] text-slate-500">Most repeated</p>
+      <h2 class="mt-1 text-xl font-semibold text-slate-900"><%= window.to_s.capitalize %></h2>
+      <% if meals.any? %>
+        <ul class="mt-4 space-y-3">
+          <% meals.each do |meal| %>
+            <li class="flex items-center justify-between rounded-2xl bg-slate-50 px-4 py-3 text-sm text-slate-600">
+              <span class="font-semibold text-slate-900"><%= meal[:name] %></span>
+              <span><%= meal[:total] %> times</span>
+            </li>
+          <% end %>
+        </ul>
+      <% else %>
+        <p class="mt-4 text-sm text-slate-500">Nothing repeated yet for this window.</p>
+      <% end %>
+    </section>
+  <% end %>
+</div>
+
+<div class="grid gap-5 lg:grid-cols-2">
+  <section class="<%= card %>">
+    <p class="text-xs font-semibold uppercase tracking-[0.3em] text-slate-500">It's been a while</p>
+    <h2 class="mt-1 text-xl font-semibold text-slate-900">Meals you might want back in rotation</h2>
+    <% if @overdue_favorites.any? %>
+      <ul class="mt-4 space-y-3">
+        <% @overdue_favorites.each do |favorite| %>
+          <li class="rounded-2xl bg-slate-50 px-4 py-3 text-sm text-slate-600">
+            <div class="flex items-center justify-between gap-4">
+              <span class="font-semibold text-slate-900"><%= favorite[:name] %></span>
+              <span><%= favorite[:total_logged] %> times total</span>
+            </div>
+            <p class="mt-1">Last had <%= favorite[:last_ate_on].to_fs(:long) %></p>
+          </li>
+        <% end %>
+      </ul>
+    <% else %>
+      <p class="mt-4 text-sm text-slate-500">Once you've added a few meals, this will call out old favorites.</p>
+    <% end %>
+  </section>
+
+  <section class="<%= card %>">
+    <p class="text-xs font-semibold uppercase tracking-[0.3em] text-slate-500">Recommendation traction</p>
+    <h2 class="mt-1 text-xl font-semibold text-slate-900">What people are actually acting on</h2>
+    <div class="mt-4 grid gap-3 sm:grid-cols-2">
+      <div class="rounded-2xl bg-slate-50 px-4 py-4">
+        <p class="text-xs font-semibold uppercase tracking-[0.25em] text-slate-400">From your history</p>
+        <p class="mt-2 text-3xl font-semibold text-slate-900"><%= @recommendation_clicks["personal"] || 0 %></p>
+        <p class="mt-1 text-sm text-slate-500">Times you tapped a personal suggestion.</p>
+      </div>
+      <div class="rounded-2xl bg-slate-50 px-4 py-4">
+        <p class="text-xs font-semibold uppercase tracking-[0.25em] text-slate-400">From people you follow</p>
+        <p class="mt-2 text-3xl font-semibold text-slate-900"><%= @recommendation_clicks["friend"] || 0 %></p>
+        <p class="mt-1 text-sm text-slate-500">Times a friend-driven suggestion turned into action.</p>
+      </div>
+    </div>
+
+    <div class="mt-4 rounded-2xl bg-slate-50 px-4 py-4 text-sm text-slate-600">
+      <p class="font-semibold text-slate-900">Where meals came from this month</p>
+      <ul class="mt-3 space-y-2">
+        <% @source_distribution.each do |source, total| %>
+          <li class="flex items-center justify-between">
+            <span><%= source.humanize %></span>
+            <span class="font-semibold text-slate-900"><%= total %></span>
+          </li>
+        <% end %>
+      </ul>
+    </div>
+  </section>
+</div>

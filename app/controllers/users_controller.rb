@@ -1,4 +1,10 @@
 class UsersController < ApplicationController
+  before_action :require_authentication!, only: :index
+
+  def index
+    @users = User.where.not(id: current_user.id).includes(:followers, :following).order(:name)
+  end
+
   def new
     @user = User.new
   end

@@ -11,9 +11,6 @@
 
     <%= yield :head %>
 
-    <%# Enable PWA manifest for installable apps (make sure to enable in config/routes.rb too!) %>
-    <%#= tag.link rel: "manifest", href: pwa_manifest_path(format: :json) %>
-
     <link rel="icon" href="<%= asset_path('favicon-32.png') %>" sizes="32x32" type="image/png">
     <link rel="apple-touch-icon" href="<%= asset_path('favicon-180.png') %>" sizes="180x180">
 
@@ -27,21 +24,25 @@
   <% email_signup_page = controller_name == 'users' && %w[new create].include?(action_name) %>
   <% on_home_page = controller_name == 'dashboard' && action_name == 'show' %>
   <% on_meals_page = controller_name == 'meals' %>
+  <% on_people_page = controller_name == 'users' && action_name == 'index' %>
+  <% on_insights_page = controller_name == 'insights' && action_name == 'show' %>
   <% immersive_background_page = landing_page || auth_page || email_signup_page %>
-  <% full_height_page = immersive_background_page || controller_name.in?(%w[dashboard meals]) %>
+  <% full_height_page = immersive_background_page || controller_name.in?(%w[dashboard meals users insights]) %>
   <% background_image_for_body = asset_path(session_background_asset.presence || 'banner-1600.jpg') %>
   <% overlay_style = "background-image: linear-gradient(to bottom, rgba(0,0,0,0.45), rgba(0,0,0,0.15)), url('#{background_image_for_body}'); background-size: cover; background-position: center; background-attachment: fixed;" %>
   <body data-theme="white" class="relative z-0 min-h-screen overflow-y-auto text-white" style="<%= overlay_style %>">
     <% show_header = !immersive_background_page && (user_signed_in? || !landing_page) %>
     <% if show_header %>
       <header class="sticky top-0 z-40 border-b border-white/20 bg-white/5 backdrop-blur">
-        <div class="mx-auto flex max-w-6xl items-center justify-end gap-4 px-4 py-3 text-sm font-semibold text-white/80">
+        <div class="mx-auto flex max-w-6xl flex-wrap items-center justify-between gap-3 px-4 py-3 text-sm font-semibold text-white/80">
+          <%= link_to "Today We Ate", home_path, class: ["text-xs uppercase tracking-[0.35em] transition hover:text-white", on_home_page ? "text-white" : "text-white/60"].join(" ") %>
           <% if user_signed_in? %>
-            <% nav_links = [] %>
-            <% nav_links << link_to("Home", home_path, class: ["hover:text-white", on_home_page ? "text-white" : "text-white/70"].join(" ")) %>
-            <% nav_links << link_to("History", meals_path, class: ["hover:text-white", on_meals_page ? "text-white" : "text-white/70"].join(" ")) %>
-            <% nav_links << link_to("Sign out", sign_out_path, data: { turbo_method: :delete }, class: "text-red-200 hover:text-red-100") %>
-            <%= safe_join(nav_links, content_tag(:span, "|", class: "px-3 text-white/40")) %>
+            <nav class="flex flex-wrap items-center justify-end gap-2 sm:gap-4">
+              <%= link_to "History", meals_path, class: ["rounded-full px-3 py-1 transition hover:bg-white/10 hover:text-white", on_meals_page ? "bg-white/15 text-white" : "text-white/70"].join(" ") %>
+              <%= link_to "Insights", insights_path, class: ["rounded-full px-3 py-1 transition hover:bg-white/10 hover:text-white", on_insights_page ? "bg-white/15 text-white" : "text-white/70"].join(" ") %>
+              <%= link_to "People", people_path, class: ["rounded-full px-3 py-1 transition hover:bg-white/10 hover:text-white", on_people_page ? "bg-white/15 text-white" : "text-white/70"].join(" ") %>
+              <%= link_to "Sign out", sign_out_path, data: { turbo_method: :delete }, class: "rounded-full px-3 py-1 text-red-200 transition hover:bg-red-500/20 hover:text-red-100" %>
+            </nav>
           <% else %>
             <%= link_to "Sign in", login_path, class: "rounded-full border border-white/40 px-4 py-1 text-white hover:bg-white/10" %>
           <% end %>
@@ -56,6 +57,21 @@
       end %>
     <div class="<%= full_height_page ? "min-h-screen flex flex-col" : "" %>">
       <main class="flex-1 <%= main_classes %>">
+        <% if flash[:notice].present? || flash[:alert].present? %>
+          <div class="w-full">
+            <% if flash[:notice].present? && !user_signed_in? %>
+              <div class="mb-4 rounded-2xl border border-emerald-200/60 bg-emerald-50/90 px-4 py-3 text-sm font-semibold text-emerald-800 shadow-sm">
+                <%= flash[:notice] %>
+              </div>
+            <% end %>
+            <% if flash[:alert].present? %>
+              <div class="mb-4 rounded-2xl border border-rose-200/60 bg-rose-50/90 px-4 py-3 text-sm font-semibold text-rose-800 shadow-sm">
+                <%= flash[:alert] %>
+              </div>
+            <% end %>
+          </div>
+        <% end %>
+
         <%= yield %>
       </main>
 

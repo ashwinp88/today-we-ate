@@ -1,0 +1,34 @@
+<section class="rounded-3xl border border-white/50 bg-white/90 p-6 shadow-xl backdrop-blur">
+  <div class="mb-6 flex flex-col gap-2">
+    <div>
+      <p class="text-xs font-semibold uppercase tracking-[0.3em] text-slate-500">Build your circle</p>
+      <h1 class="mt-1 text-2xl font-semibold text-slate-900">Find people to follow</h1>
+      <p class="text-sm text-slate-500">Follow a few people and their meals will start showing up in your suggestions and feed.</p>
+    </div>
+  </div>
+
+  <div class="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
+    <% @users.each do |user| %>
+      <article class="rounded-3xl border border-slate-100 bg-white p-5 shadow-sm">
+        <div class="flex items-center gap-4">
+          <div class="flex h-12 w-12 items-center justify-center rounded-full bg-slate-100 text-lg font-semibold text-slate-700">
+            <%= user.first_name.first.upcase %>
+          </div>
+          <div>
+            <h2 class="text-lg font-semibold text-slate-900"><%= user.name %></h2>
+            <p class="text-sm text-slate-500"><%= pluralize(user.followers.count, "follower") %> · <%= pluralize(user.meals.count, "meal") %></p>
+          </div>
+        </div>
+
+        <div class="mt-5 flex items-center justify-between gap-3">
+          <p class="text-sm text-slate-500">See what <%= user.first_name %> keeps coming back to.</p>
+          <% if current_user.follows?(user) %>
+            <%= button_to "Following", user_follow_path(user), method: :delete, class: "rounded-full border border-slate-200 px-4 py-2 text-sm font-semibold text-slate-700 hover:bg-slate-100" %>
+          <% else %>
+            <%= button_to "Follow", user_follow_path(user), method: :post, class: "rounded-full bg-slate-900 px-4 py-2 text-sm font-semibold text-white hover:bg-slate-800" %>
+          <% end %>
+        </div>
+      </article>
+    <% end %>
+  </div>
+</section>
